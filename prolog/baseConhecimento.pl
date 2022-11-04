@@ -10,18 +10,18 @@ facto_dispara_regras(want_shift_load(this_period,_), [2,4,9]).
 facto_dispara_regras(has_EV(this_period,_), [2,4,11,12,15,18,23,29]).
 facto_dispara_regras(selling(this_period,_), [3]).
 facto_dispara_regras(excess(this_period,_), [3]).
-facto_dispara_regras(check_battery(this_period, _), [5,6]).
+facto_dispara_regras(check_battery(this_period,_), [5,6]).
 facto_dispara_regras(battery_ev(this_period,_), [5,6,13,14,16,17,24,25,26]).
-facto_dispara_regras(check_expensive_hour(this_period, _), [7,8]).
+facto_dispara_regras(check_expensive_hour(this_period,_), [7,8]).
 facto_dispara_regras(expensive_hour(this_period,_), [7,8,27,28]).
 facto_dispara_regras(shift_load_options(this_period,_), [10]).
 facto_dispara_regras(options(this_period,_), [10]).
-facto_dispara_regras(check_battery_scarcity(this_period, _), [13,14]).
-facto_dispara_regras(check_battery_scarcity_r_less_than_one(this_period, _), [16,17]).
+facto_dispara_regras(check_battery_scarcity(this_period,_), [13,14]).
+facto_dispara_regras(check_battery_scarcity_r_less_than_one(this_period,_), [16,17]).
 facto_dispara_regras(r_improvement(this_period,_), [20,21,22]).
 facto_dispara_regras(can_improve_r(this_period,_), [20,21,22]).
 facto_dispara_regras(check_battery_r_equals_zero(this_period,_), [24,25,26]).
-facto_dispara_regras(check_expensive_hour_r_equals_zero(this_period, _), [27,28]).
+facto_dispara_regras(check_expensive_hour_r_equals_zero(this_period,_), [27,28]).
 facto_dispara_regras(community_ratio(this_period,_),[30,33,38,40]).
 facto_dispara_regras(community_predicted_scarcity(this_period,_),[30,33,43,44,45]).
 facto_dispara_regras(community_check_battery(this_period,_),[31,32]).
@@ -58,26 +58,26 @@ regra 2
 
 regra 3
 	se [selling(this_period,1) e excess(this_period,E)]
-	entao [cria_facto(should_sell(this_period, E))].
+	entao [cria_facto(should_sell(this_period,E))].
 
 regra 4
 	se [shift_load_question(this_period,1) e want_shift_load(this_period,0) e has_EV(this_period,1)]
 	entao [cria_facto(check_battery(this_period,1))].
 
 regra 5
-	se [check_battery(this_period, 1) e avalia(battery_ev(this_period,>=,50))]
+	se [check_battery(this_period,1) e avalia(battery_ev(this_period,>=,50))]
 	entao [cria_facto(selling(this_period,1))].
 
 regra 6
-	se [check_battery(this_period, 1) e avalia(battery_ev(this_period,<,50))]
+	se [check_battery(this_period,1) e avalia(battery_ev(this_period,<,50))]
 	entao [cria_facto(check_expensive_hour(this_period,1))].
 
 regra 7
-	se [check_expensive_hour(this_period, 1) e expensive_hour(this_period,1)]
+	se [check_expensive_hour(this_period,1) e expensive_hour(this_period,1)]
 	entao [cria_facto(selling(this_period,1))].
 
 regra 8
-	se [check_expensive_hour(this_period, 1) e expensive_hour(this_period,0)]
+	se [check_expensive_hour(this_period,1) e expensive_hour(this_period,0)]
 	entao [cria_facto(charge_battery(this_period,1))].
 
 regra 9
@@ -85,7 +85,7 @@ regra 9
 	entao [cria_facto(shift_load_options(this_period,1))].
 
 regra 10
-	se [shift_load_options(this_period,1) e options(this_period, OP)]
+	se [shift_load_options(this_period,1) e options(this_period,OP)]
 	entao [cria_facto(options_to_shift_load(this_period,OP))].
 
 regra 11
@@ -97,11 +97,11 @@ regra 12
 	entao [cria_facto(check_battery_scarcity(this_period,1))].
 
 regra 13
-	se [check_battery_scarcity(this_period, 1) e avalia(battery_ev(this_period,<,50))]
+	se [check_battery_scarcity(this_period,1) e avalia(battery_ev(this_period,<,50))]
 	entao [cria_facto(charge_battery(this_period,1))].
 
 regra 14
-	se [check_battery_scarcity(this_period, 1) e avalia(battery_ev(this_period,>=,50))]
+	se [check_battery_scarcity(this_period,1) e avalia(battery_ev(this_period,>=,50))]
 	entao [cria_facto(selling(this_period,1))].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%[1>=R>0]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -110,11 +110,11 @@ regra 15
 	entao [cria_facto(check_battery_scarcity_r_less_than_one(this_period,1))].
 
 regra 16
-	se [check_battery_scarcity_r_less_than_one(this_period, 1) e avalia(battery_ev(this_period,<,50))]
+	se [check_battery_scarcity_r_less_than_one(this_period,1) e avalia(battery_ev(this_period,<,50))]
 	entao [cria_facto(charge_battery(this_period,1))].
 
 regra 17
-	se [check_battery_scarcity_r_less_than_one(this_period, 1) e avalia(battery_ev(this_period,>=,50))]
+	se [check_battery_scarcity_r_less_than_one(this_period,1) e avalia(battery_ev(this_period,>=,50))]
 	entao [cria_facto(r_improvement(this_period,1))].
 
 regra 18
@@ -135,7 +135,7 @@ regra 21
 
 regra 22
 	se [r_improvement(this_period,1) e can_improve_r(this_period,0) e avalia(ratio(this_period,\==,1))]
-	entao  [cria_facto(buy_from_cheapest_market(this_period,1))].
+	entao [cria_facto(buy_from_cheapest_market(this_period,1))].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%[R=0]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -156,11 +156,11 @@ regra 26
 	entao [cria_facto(check_expensive_hour_r_equals_zero(this_period,1))].
 
 regra 27
-	se [check_expensive_hour_r_equals_zero(this_period, 1) e expensive_hour(this_period,1)]
+	se [check_expensive_hour_r_equals_zero(this_period,1) e expensive_hour(this_period,1)]
 	entao [print_shift_load_to_essential_consumption].
 	
 regra 28
-	se [check_expensive_hour_r_equals_zero(this_period, 1) e expensive_hour(this_period,0)]
+	se [check_expensive_hour_r_equals_zero(this_period,1) e expensive_hour(this_period,0)]
 	entao [cria_facto(keep_buying(this_period,1))].	
 		
 regra 29
@@ -250,7 +250,7 @@ facto(3,wind_speed(this_period,15)).
 
 
 %production
-facto(4,production(this_period, 2000)).
+facto(4,production(this_period,2000)).
 
 %devices
 facto(5,device(ac,200)).
@@ -279,11 +279,11 @@ facto(22,device(ev,150)).
 facto(23,has_EV(this_period,1)).
 facto(24,predicted_scarcity(this_period,0)).
 facto(25,want_shift_load(this_period,0)).
-facto(26, battery_ev(this_period,89)).
+facto(26, battery_ev(this_period,30)).
 facto(27,preco_medio(this_period,0.12)).
-facto(28,production_community(this_period, 6000)).
-facto(29,total_consumo_community(this_period, 4000)).
-facto(30,community_battery(this_period, 30)).
+facto(28,production_community(this_period,6000)).
+facto(29,total_consumo_community(this_period,4000)).
+facto(30,community_battery(this_period,30)).
 
 facto(31,facto_total_consumo(this_period,1450)).
 facto(32,ratio(this_period,1.3793103448275863)).
