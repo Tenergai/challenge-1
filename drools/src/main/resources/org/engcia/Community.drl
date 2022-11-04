@@ -23,7 +23,6 @@ global java.lang.String participantId;
 
 rule "R0: Is Manager"
     when
-
         eval(answer("Are you the manager", "yes"))
     then
         Hypothesis h = new Hypothesis("manager", "true");
