@@ -373,6 +373,7 @@ rule "R6: R>1 and Has EV and Sufficiently Charged Battery -> Sell to the communi
         Hypothesis(description == "Has EV", value == "true")
         $p : Participant(id == participantId, isEvSufficientlyCharged() != false)
     then
+        System.out.println($p.isEvSufficientlyCharged());
         System.out.println("R6 - R>1 and Has EV and Sufficiently Charged Battery -> Sell to the community market");
         Conclusion c = new Conclusion(Conclusion.SELL_COMMUNITY_MARKET);
         insert(c);
@@ -384,35 +385,14 @@ rule "R7: R>1 and Has EV and Not Sufficiently Charged Battery"
         Hypothesis(description == "R>1", value == "true")
         Hypothesis(description == "Has EV", value == "true")
         $p : Participant(id == participantId, isEvSufficientlyCharged() == false)
-    then
-        System.out.println("R7 - R>1 and Has EV and Not Sufficiently Charged Battery");
-        Hypothesis h = new Hypothesis("Sufficiently Charged Battery", "false");
-        insert(h);
-end
 
-rule "R8: R>1 and Has EV and Not Sufficiently Charged Battery and Not Expensive Hour -> Charge Battery"
-    when
-        Hypothesis(description == "manager", value == "false")
-        Hypothesis(description == "R>1", value == "true")
-        Hypothesis(description == "Has EV", value == "true")
-        Hypothesis(description == "Sufficiently Charged Battery", value == "false")
-        eval(answer("Expensive Hour", "no"))
     then
+
+        System.out.println("R7 - R>1 and Has EV and Not Sufficiently Charged Battery");
         Conclusion c = new Conclusion(Conclusion.CHARGE_BATTERY);
         insert(c);
 end
 
-rule "R9: R>1 and Has EV and Not Sufficiently Charged Battery and Expensive Hour -> Sell"
-    when
-        Hypothesis(description == "manager", value == "false")
-        Hypothesis(description == "R>1", value == "true")
-        Hypothesis(description == "Has EV", value == "true")
-        Hypothesis(description == "Sufficiently Charged Battery", value == "false")
-        eval(answer("Expensive Hour", "yes"))
-    then
-        Conclusion c = new Conclusion(Conclusion.SELL_COMMUNITY_MARKET);
-        insert(c);
-end
 
 rule "R10: R>1 and Not Predicted Energy Scarcity and Wants to shift load -> Shift Load"
     when
@@ -422,10 +402,14 @@ rule "R10: R>1 and Not Predicted Energy Scarcity and Wants to shift load -> Shif
         eval(answer("Wants to shift load", "yes"))
         $p : Participant(id == participantId)
     then
-        chooseDevicesTurnOn($p);
-        Conclusion c = new Conclusion(Conclusion.SHIFT_LOAD);
-        insert(c);
-
+        boolean hasDevice = chooseDevicesTurnOn($p);
+        if(hasDevice){
+            Conclusion c = new Conclusion(Conclusion.LOAD_SHIFTED);
+            insert(c);
+        }else{
+            Hypothesis h = new Hypothesis("Wants to shift load", "false");
+            insert(h);
+        }
 end
 
 rule "R11: R>1 and Not Predicted Energy Scarcity and Not Wants to shift load"
@@ -753,7 +737,7 @@ rule "R41: Not R>0 and Not Predicted Energy Scarcity and Expensive Hour -> Shift
         Hypothesis(description == "Predicted Energy Scarcity", value == "false")
         eval(answer("Expensive Hour", "yes"))
     then
-        Conclusion c = new Conclusion(Conclusion.SHIFT_LOAD);
+        Conclusion c = new Conclusion(Conclusion.SHIFT_LOAD_ESSENTIAL);
         insert(c);
 end
 
@@ -775,7 +759,7 @@ rule "R43: Not R>0 and Not Has EV and Expensive Hour -> Shift load to essential 
         Hypothesis(description == "Has EV", value == "false")
         eval(answer("Expensive Hour", "yes"))
     then
-        Conclusion c = new Conclusion(Conclusion.SHIFT_LOAD);
+        Conclusion c = new Conclusion(Conclusion.SHIFT_LOAD_ESSENTIAL);
         insert(c);
 end
 
