@@ -106,7 +106,7 @@ regra 14
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%[1>=R>0]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 regra 15
-	se [usertype(this_period,individual) e avalia(ratio(this_period,<=,1)) e avalia(ratio(this_period,>,0)) e predicted_scarcity(this_period,1) e has_EV(this_period,1)]
+	se [usertype(this_period,individual) e avalia(ratio(this_period,=<,1)) e avalia(ratio(this_period,>,0)) e predicted_scarcity(this_period,1) e has_EV(this_period,1)]
 	entao [cria_facto(check_battery_scarcity_r_less_than_one(this_period,1))].
 
 regra 16
@@ -118,11 +118,11 @@ regra 17
 	entao [cria_facto(r_improvement(this_period,1))].
 
 regra 18
-	se [usertype(this_period,individual) e avalia(ratio(this_period,<=,1)) e avalia(ratio(this_period,>,0)) e predicted_scarcity(this_period,1) e has_EV(this_period,0)]
+	se [usertype(this_period,individual) e avalia(ratio(this_period,=<,1)) e avalia(ratio(this_period,>,0)) e predicted_scarcity(this_period,1) e has_EV(this_period,0)]
 	entao [cria_facto(r_improvement(this_period,1))].
 	
 regra 19
-	se [usertype(this_period,individual) e avalia(ratio(this_period,<=,1)) e avalia(ratio(this_period,>,0)) e predicted_scarcity(this_period,0)]
+	se [usertype(this_period,individual) e avalia(ratio(this_period,=<,1)) e avalia(ratio(this_period,>,0)) e predicted_scarcity(this_period,0)]
 	entao [cria_facto(r_improvement(this_period,1))].
 	
 regra 20
@@ -130,17 +130,17 @@ regra 20
 	entao [cria_facto(run_improvement(this_period,print_improvements))].
 
 regra 21
-	se [r_improvement(this_period,1) e can_improve_r(this_period,0) e avalia(ratio(this_period,=,1))]
+	se [r_improvement(this_period,1) e can_improve_r(this_period,0) e avalia(ratio(this_period,==,1))]
 	entao [cria_facto(run_no_operation(this_period,print_no_operation))].
 
 regra 22
-	se [r_improvement(this_period,1) e can_improve_r(this_period,0) e avalia(ratio(this_period,=\=,1))]
+	se [r_improvement(this_period,1) e can_improve_r(this_period,0) e avalia(ratio(this_period,\==,1))]
 	entao  [cria_facto(buy_from_cheapest_market(this_period,1))].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%[R=0]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 regra 23
-	se [usertype(this_period,individual) e avalia(ratio(this_period,=,0)) e has_EV(this_period,1)]
+	se [usertype(this_period,individual) e avalia(ratio(this_period,==,0)) e has_EV(this_period,1)]
 	entao [cria_facto(check_battery_r_equals_zero(this_period,1))].
 	
 regra 24
@@ -164,7 +164,7 @@ regra 28
 	entao [cria_facto(keep_buying(this_period,1))].	
 		
 regra 29
-	se [usertype(this_period,individual) e avalia(ratio(this_period,=,0)) e has_EV(this_period,0) ]
+	se [usertype(this_period,individual) e avalia(ratio(this_period,==,0)) e has_EV(this_period,0) ]
 	entao [cria_facto(check_expensive_hour_r_equals_zero(this_period,1))].
 
 %%%%%%%%%%%%Community%%%%%%%%%%%%%%%%%%%%
@@ -202,7 +202,7 @@ regra 37
 	entao [cria_facto(send_to_the_grid(this_period,1))].
 
 regra 38 
-	se [usertype(this_period,community) e avalia(community_ratio(this_period,<=,1)) e current_energy_scarcity(this_period,1)]
+	se [usertype(this_period,community) e avalia(community_ratio(this_period,=<,1)) e current_energy_scarcity(this_period,1)]
 	entao [cria_facto(check_community_batteries_charged(this_period,1))].
 
 regra 39
@@ -210,7 +210,7 @@ regra 39
 	entao [cria_facto(use_community_battery_energy(this_period,1))].
 	
 regra 40
-	se [usertype(this_period,community) e avalia(community_ratio(this_period,<=,1)) e current_energy_scarcity(this_period,0)]
+	se [usertype(this_period,community) e avalia(community_ratio(this_period,=<,1)) e current_energy_scarcity(this_period,0)]
 	entao [cria_facto(check_community_participants_with_surplus(this_period,1))].
 
 regra 41
