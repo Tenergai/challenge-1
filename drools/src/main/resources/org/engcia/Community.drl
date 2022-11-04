@@ -12,7 +12,7 @@ import org.engcia.model.Weather;
 import function org.engcia.view.UI.answer;
 
 import function org.engcia.sample.DroolsTest.chooseDevicesTurnOn;
-
+import function org.engcia.sample.DroolsTest.chooseDevicesNonEssential;
 import function org.engcia.fuzzy.FuzzyLogic.fuzzify;
 
 query "Conclusions"
@@ -371,6 +371,7 @@ rule "R6: R>1 and Has EV and Sufficiently Charged Battery -> Sell to the communi
         Hypothesis(description == "R>1", value == "true")
         Hypothesis(description == "Has EV", value == "true")
         $p : Participant(id == participantId, isEvSufficientlyCharged())
+        Hypothesis(description == "Predicted Energy Scarcity", value == "true")
     then
         System.out.println($p.isEvSufficientlyCharged());
         System.out.println("R6 - R>1 and Has EV and Sufficiently Charged Battery -> Sell to the community market");
@@ -384,6 +385,7 @@ rule "R7: R>1 and Has EV and Not Sufficiently Charged Battery"
         Hypothesis(description == "R>1", value == "true")
         Hypothesis(description == "Has EV", value == "true")
         $p : Participant(id == participantId, isEvSufficientlyCharged() == false)
+        Hypothesis(description == "Predicted Energy Scarcity", value == "true")
 
     then
 
@@ -440,6 +442,7 @@ rule "R13: R>1 and Not Wants to shift load and Not Has EV -> Sell"
         Hypothesis(description == "Wants to shift load", value == "false")
         Participant(id == participantId, hasEv() == false)
     then
+        System.out.println("R13: R>1 and Not Wants to shift load and Not Has EV -> Sell");
         Conclusion c = new Conclusion(Conclusion.SELL_COMMUNITY_MARKET);
         insert(c);
 end
@@ -587,11 +590,18 @@ rule "R26: R>0 and Not Predicted Energy Scarcity and Can Improve R -> Improve R"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         Hypothesis(description == "Predicted Energy Scarcity", value == "false")
-        eval(answer("Can Improve R", "yes"))
+        $p : Participant(id == participantId)
+        eval(answer("Do you wish to lower your consumption", "yes"))
     then
-        System.out.println("R26: R>0 and Not Predicted Energy Scarcity and Can Improve R -> Improve R");
-        Conclusion c = new Conclusion(Conclusion.IMPROVE_R);
-        insert(c);
+        boolean hasDevice = chooseDevicesNonEssential($p);
+        if(hasDevice){
+            System.out.println("R26: R>0 and Not Predicted Energy Scarcity and Can Improve R -> Improve R");
+            Conclusion c = new Conclusion(Conclusion.IMPROVE_R);
+            insert(c);
+        }else{
+            Hypothesis h = new Hypothesis("Improve R", "false");
+            insert(h);
+        }
 end
 
 rule "R27: R>0 and Not Has EV and Can Improve R -> Improve R"
@@ -599,7 +609,7 @@ rule "R27: R>0 and Not Has EV and Can Improve R -> Improve R"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         Hypothesis(description == "Has EV", value == "false")
-        eval(answer("Can Improve R", "yes"))
+        eval(answer("Do you wish to lower your consumption", "yes"))
     then
         System.out.println("R27: R>0 and Not Has EV and Can Improve R -> Improve R");
         Conclusion c = new Conclusion(Conclusion.IMPROVE_R);
@@ -611,7 +621,7 @@ rule "R28: R>0 and Sufficiently Charged Battery and Can Improve R -> Improve R"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         Hypothesis(description == "Sufficiently Charged Battery", value == "true")
-        eval(answer("Can Improve R", "yes"))
+        eval(answer("Do you wish to lower your consumption", "yes"))
     then
         System.out.println("R28: R>0 and Sufficiently Charged Battery and Can Improve R -> Improve R");
         Conclusion c = new Conclusion(Conclusion.IMPROVE_R);
@@ -623,7 +633,7 @@ rule "R29: R>0 and Not Predicted Energy Scarcity and Cannot Improve R"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         Hypothesis(description == "Predicted Energy Scarcity", value == "false")
-        eval(answer("Can Improve R", "no"))
+        eval(answer("Do you wish to lower your consumption", "no"))
     then
         System.out.println("R29: R>0 and Not Predicted Energy Scarcity and Cannot Improve R");
         Hypothesis h = new Hypothesis("Improve R", "false");
@@ -635,7 +645,7 @@ rule "R30: R>0 and Not Has EV and Cannot Improve R"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         Hypothesis(description == "Has EV", value == "false")
-        eval(answer("Can Improve R", "no"))
+        eval(answer("Do you wish to lower your consumption", "no"))
     then
         System.out.println("R30: R>0 and Not Has EV and Cannot Improve R");
         Hypothesis h = new Hypothesis("Improve R", "false");
@@ -647,7 +657,7 @@ rule "R31: R>0 and Sufficiently Charged Battery and Cannot Improve R"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         Hypothesis(description == "Sufficiently Charged Battery", value == "true")
-        eval(answer("Can Improve R", "no"))
+        eval(answer("Do you wish to lower your consumption", "no"))
     then
         System.out.println("R31: R>0 and Sufficiently Charged Battery and Cannot Improve R");
         Hypothesis h = new Hypothesis("Improve R", "false");

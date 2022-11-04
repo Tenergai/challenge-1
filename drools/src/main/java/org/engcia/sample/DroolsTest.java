@@ -35,6 +35,7 @@ public class DroolsTest {
     }
 
     private static void bootstrap(KieSession kieSession) {
+        //bootstrapExpensiveHourR1(kieSession);
         ArrayList<Device> devices = new ArrayList<>();
 
         Device kettle = new Device("kettle", 1, false, true);
@@ -43,21 +44,21 @@ public class DroolsTest {
         devices.add(washingMachine);
         Device fridge = new Device("fridge", 3, true, true);
         devices.add(fridge);
-        Device ac = new Device("ac", 40, true, true);
+        Device ac = new Device("ac", 90, true, true);
         devices.add(ac);
-        Device aird = new Device("aird", 15, false, true);
-        devices.add(aird);
+        Device hairDryer = new Device("hairDryer", 15, false, true);
+        devices.add(hairDryer);
 
-        Participant participant = new Participant("1",100,devices);
+        Participant participant = new Participant("1", 100, devices);
         kieSession.setGlobal("participantId", participant.getId());
 
-        Weather weather = new Weather(30.0, 700.0, 20.0);
-        int threshold = FuzzyLogic.fuzzify(weather.getWindSpeedKMH().intValue(),weather.getSolarRadiationWattsM2().intValue());
+        Weather weather = new Weather(30.0, 900.0, 21.0);
+        int threshold = FuzzyLogic.fuzzify(weather.getWindSpeedKMH().intValue(), weather.getSolarRadiationWattsM2().intValue());
         weather.setPredictedEnergyScarcity(threshold);
 
-        Battery ev = new Battery(90,10);
-        //participant.setEv(ev);
-        //ev.setThreshold(threshold);
+        Battery ev = new Battery(10, 10);
+        participant.setEv(ev);
+        ev.setThreshold(threshold);
 
         Pricing p = new Pricing(1000.0);
 
@@ -121,12 +122,12 @@ public class DroolsTest {
         }
     }
 
-    public static boolean chooseDevicesTurnOn(Participant participant){
+    public static boolean chooseDevicesTurnOn(Participant participant) {
 
-        boolean hasDevOff =false;
-        for(int i = 0; i < participant.getDevices().size(); i++){
+        boolean hasDevOff = false;
+        for (int i = 0; i < participant.getDevices().size(); i++) {
             Device dev = participant.getDevices().get(i);
-            if(!dev.isOn()) {
+            if (!dev.isOn()) {
                 System.out.printf("%d - %s (%.2f)\n", i, dev.getName(), participant.getProduction() / (participant.getConsumption() + dev.getConsumption()));
                 hasDevOff = true;
             }
@@ -143,13 +144,14 @@ public class DroolsTest {
         dev.turnOn();
         return true;
     }
-    public static void chooseDevicesTurnOff(Participant participant){
+
+    public static void chooseDevicesTurnOff(Participant participant) {
         System.out.println("You can turn off these devices:");
 
-        for(int i = 0; i<participant.getDevices().size(); i++){
+        for (int i = 0; i < participant.getDevices().size(); i++) {
             Device dev = participant.getDevices().get(i);
-            if(dev.isOn())
-                System.out.printf("%d - %s (%.2f)\n", i, dev.getName(), participant.getProduction()/(participant.getConsumption()+ dev.getConsumption()));
+            if (dev.isOn())
+                System.out.printf("%d - %s (%.2f)\n", i, dev.getName(), participant.getProduction() / (participant.getConsumption() - dev.getConsumption()));
         }
         Scanner sc = new Scanner(System.in);
         System.out.println("Which one do you want to turn off?");
@@ -159,104 +161,28 @@ public class DroolsTest {
         dev.turnOff();
     }
 
-    //This scenario assumes r>1, pes yes, has ev no
-    private static void bootstrapSTC0(KieSession kieSession) {
-        ArrayList<Device> devices = new ArrayList<>();
+    public static boolean chooseDevicesNonEssential(Participant participant) {
 
-        Device kettle = new Device("kettle", 15, false, false);
-        devices.add(kettle);
-        Device washingMachine = new Device("washing machine", 15, false, true);
-        devices.add(washingMachine);
-        Device fridge = new Device("fridge", 30, true, true);
-        devices.add(fridge);
-        Device ac = new Device("ac", 40, true, true);
-        devices.add(ac);
-        Device aird = new Device("aird", 15, false, false);
-        devices.add(aird);
-
-        Participant participant = new Participant("1",100,devices);
-        kieSession.setGlobal("participantId", participant.getId());
-
-        Weather weather = new Weather(30.0, 300.0, 12.0);
-        int threshold = FuzzyLogic.fuzzify(weather.getWindSpeedKMH().intValue(),weather.getSolarRadiationWattsM2().intValue());
-        weather.setPredictedEnergyScarcity(threshold);
-
-        Battery ev = new Battery(30,10);
-        //participant.setEv(ev);
-
-        Pricing p = new Pricing(1000.0);
-
-        kieSession.insert(participant);
-        kieSession.insert(weather);
-        kieSession.insert(ev);
-        kieSession.insert(p);
-    }
-    //This scenario assumes r>1, pes yes, has ev yes, suff charged yes
-    private static void bootstrapSTC1(KieSession kieSession) {
-        ArrayList<Device> devices = new ArrayList<>();
-
-        Device kettle = new Device("kettle", 15, false, false);
-        devices.add(kettle);
-        Device washingMachine = new Device("washing machine", 15, false, true);
-        devices.add(washingMachine);
-        Device fridge = new Device("fridge", 30, true, true);
-        devices.add(fridge);
-        Device ac = new Device("ac", 40, true, true);
-        devices.add(ac);
-        Device aird = new Device("aird", 15, false, false);
-        devices.add(aird);
-
-        Participant participant = new Participant("1",100,devices);
-        kieSession.setGlobal("participantId", participant.getId());
-
-        Weather weather = new Weather(30.0, 300.0, 12.0);
-        int threshold = FuzzyLogic.fuzzify(weather.getWindSpeedKMH().intValue(),weather.getSolarRadiationWattsM2().intValue());
-        weather.setPredictedEnergyScarcity(threshold);
-
-        Battery ev = new Battery(90,10);
-        participant.setEv(ev);
-
-        Pricing p = new Pricing(1000.0);
-
-        kieSession.insert(participant);
-        kieSession.insert(weather);
-        kieSession.insert(ev);
-        kieSession.insert(p);
-    }
-
-    //This scenario assumes r>1, pes yes, has ev yes, suff charged no (charge battery)
-
-    private static void bootstrapCB0(KieSession kieSession) {
-        ArrayList<Device> devices = new ArrayList<>();
-
-        Device kettle = new Device("kettle", 15, false, false);
-        devices.add(kettle);
-        Device washingMachine = new Device("washing machine", 15, false, true);
-        devices.add(washingMachine);
-        Device fridge = new Device("fridge", 30, true, true);
-        devices.add(fridge);
-        Device ac = new Device("ac", 40, true, true);
-        devices.add(ac);
-        Device aird = new Device("aird", 15, false, false);
-        devices.add(aird);
-
-        Participant participant = new Participant("1",100,devices);
-        kieSession.setGlobal("participantId", participant.getId());
-
-        Weather weather = new Weather(30.0, 300.0, 12.0);
-        int threshold = FuzzyLogic.fuzzify(weather.getWindSpeedKMH().intValue(),weather.getSolarRadiationWattsM2().intValue());
-        weather.setPredictedEnergyScarcity(threshold);
-
-        Battery ev = new Battery(10,10);
-        participant.setEv(ev);
-        ev.setThreshold(threshold);
-
-        Pricing p = new Pricing(1000.0);
-
-        kieSession.insert(participant);
-        kieSession.insert(weather);
-        kieSession.insert(ev);
-        kieSession.insert(p);
+        boolean hasDevToTurnOff = false;
+        System.out.println("-1 - I do not wish to turn off any device.");
+        for (int i = 0; i < participant.getDevices().size(); i++) {
+            Device dev = participant.getDevices().get(i);
+            if (dev.isOn() && !dev.isEssential()) {
+                System.out.printf("%d - %s (%.2f)\n", i, dev.getName(), participant.getProduction() / (participant.getConsumption() - dev.getConsumption()));
+                hasDevToTurnOff = true;
+            }
+        }
+        if (!hasDevToTurnOff) {
+            System.out.println("No devices to turn off :(");
+            return false;
+        }
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Which device do you want to turn off?");
+        int devi = sc.nextInt();
+        if (devi==-1)return false;
+        Device dev = participant.getDevices().get(devi);
+        dev.turnOn();
+        return true;
     }
 
 }
