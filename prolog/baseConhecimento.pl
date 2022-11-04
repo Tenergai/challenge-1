@@ -93,7 +93,7 @@ regra 11
 	entao [cria_facto(selling(this_period,1))].
 
 regra 12
-	se[usertype(this_period,individual) e avalia(ratio(this_period,>,1)) e predicted_scarcity(this_period,1) e has_EV(this_period,1)]
+	se [usertype(this_period,individual) e avalia(ratio(this_period,>,1)) e predicted_scarcity(this_period,1) e has_EV(this_period,1)]
 	entao [cria_facto(check_battery_scarcity(this_period,1))].
 
 regra 13
@@ -206,7 +206,7 @@ regra 38
 	entao [cria_facto(check_community_batteries_charged(this_period,1))].
 
 regra 39
-	se[check_community_batteries_charged(this_period,1) e avalia(community_battery(this_period,>=,80))]
+	se [check_community_batteries_charged(this_period,1) e avalia(community_battery(this_period,>=,80))]
 	entao [cria_facto(use_community_battery_energy(this_period,1))].
 	
 regra 40
@@ -218,7 +218,7 @@ regra 41
 	entao [cria_facto(check_community_participants_with_surplus(this_period,1))].
 	
 regra 42
-	se[check_community_participants_with_surplus(this_period,1) e participant_with_surplus(this_period,1)]
+	se [check_community_participants_with_surplus(this_period,1) e participant_with_surplus(this_period,1)]
 	entao [cria_facto(should_exchange_energy_between_community_members(this_period,1))].
 
 regra 43 
