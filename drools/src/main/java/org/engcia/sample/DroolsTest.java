@@ -37,26 +37,27 @@ public class DroolsTest {
     private static void bootstrap(KieSession kieSession) {
         ArrayList<Device> devices = new ArrayList<>();
 
-        Device kettle = new Device("kettle", 15, false, false);
+        Device kettle = new Device("kettle", 1, false, true);
         devices.add(kettle);
-        Device washingMachine = new Device("washing machine", 15, false, true);
+        Device washingMachine = new Device("washing machine", 1, false, true);
         devices.add(washingMachine);
-        Device fridge = new Device("fridge", 30, true, true);
+        Device fridge = new Device("fridge", 3, true, true);
         devices.add(fridge);
         Device ac = new Device("ac", 40, true, true);
         devices.add(ac);
-        Device aird = new Device("aird", 15, false, false);
+        Device aird = new Device("aird", 15, false, true);
         devices.add(aird);
 
         Participant participant = new Participant("1",100,devices);
         kieSession.setGlobal("participantId", participant.getId());
 
-        Weather weather = new Weather(30.0, 300.0, 12.0);
+        Weather weather = new Weather(30.0, 700.0, 20.0);
         int threshold = FuzzyLogic.fuzzify(weather.getWindSpeedKMH().intValue(),weather.getSolarRadiationWattsM2().intValue());
         weather.setPredictedEnergyScarcity(threshold);
 
-        Battery ev = new Battery(30,10);
+        Battery ev = new Battery(90,10);
         //participant.setEv(ev);
+        //ev.setThreshold(threshold);
 
         Pricing p = new Pricing(1000.0);
 
@@ -120,20 +121,27 @@ public class DroolsTest {
         }
     }
 
-    public static void chooseDevicesTurnOn(Participant participant){
-        System.out.println("You can turn on these devices:");
+    public static boolean chooseDevicesTurnOn(Participant participant){
 
+        boolean hasDevOff =false;
         for(int i = 0; i < participant.getDevices().size(); i++){
             Device dev = participant.getDevices().get(i);
-            if(!dev.isOn())
-                System.out.printf("%d - %s (%.2f)\n", i, dev.getName(), participant.getProduction()/(participant.getConsumption()+ dev.getConsumption()));
+            if(!dev.isOn()) {
+                System.out.printf("%d - %s (%.2f)\n", i, dev.getName(), participant.getProduction() / (participant.getConsumption() + dev.getConsumption()));
+                hasDevOff = true;
+            }
+        }
+        if (!hasDevOff) {
+            System.out.println("No devices to turn on :(");
+            return false;
         }
         Scanner sc = new Scanner(System.in);
-        System.out.println("Which one do you want to turn on?");
+        System.out.println("Which device do you want to turn on?");
         int devi = sc.nextInt();
 
         Device dev = participant.getDevices().get(devi);
         dev.turnOn();
+        return true;
     }
     public static void chooseDevicesTurnOff(Participant participant){
         System.out.println("You can turn off these devices:");
@@ -150,4 +158,105 @@ public class DroolsTest {
         Device dev = participant.getDevices().get(devi);
         dev.turnOff();
     }
+
+    //This scenario assumes r>1, pes yes, has ev no
+    private static void bootstrapSTC0(KieSession kieSession) {
+        ArrayList<Device> devices = new ArrayList<>();
+
+        Device kettle = new Device("kettle", 15, false, false);
+        devices.add(kettle);
+        Device washingMachine = new Device("washing machine", 15, false, true);
+        devices.add(washingMachine);
+        Device fridge = new Device("fridge", 30, true, true);
+        devices.add(fridge);
+        Device ac = new Device("ac", 40, true, true);
+        devices.add(ac);
+        Device aird = new Device("aird", 15, false, false);
+        devices.add(aird);
+
+        Participant participant = new Participant("1",100,devices);
+        kieSession.setGlobal("participantId", participant.getId());
+
+        Weather weather = new Weather(30.0, 300.0, 12.0);
+        int threshold = FuzzyLogic.fuzzify(weather.getWindSpeedKMH().intValue(),weather.getSolarRadiationWattsM2().intValue());
+        weather.setPredictedEnergyScarcity(threshold);
+
+        Battery ev = new Battery(30,10);
+        //participant.setEv(ev);
+
+        Pricing p = new Pricing(1000.0);
+
+        kieSession.insert(participant);
+        kieSession.insert(weather);
+        kieSession.insert(ev);
+        kieSession.insert(p);
+    }
+    //This scenario assumes r>1, pes yes, has ev yes, suff charged yes
+    private static void bootstrapSTC1(KieSession kieSession) {
+        ArrayList<Device> devices = new ArrayList<>();
+
+        Device kettle = new Device("kettle", 15, false, false);
+        devices.add(kettle);
+        Device washingMachine = new Device("washing machine", 15, false, true);
+        devices.add(washingMachine);
+        Device fridge = new Device("fridge", 30, true, true);
+        devices.add(fridge);
+        Device ac = new Device("ac", 40, true, true);
+        devices.add(ac);
+        Device aird = new Device("aird", 15, false, false);
+        devices.add(aird);
+
+        Participant participant = new Participant("1",100,devices);
+        kieSession.setGlobal("participantId", participant.getId());
+
+        Weather weather = new Weather(30.0, 300.0, 12.0);
+        int threshold = FuzzyLogic.fuzzify(weather.getWindSpeedKMH().intValue(),weather.getSolarRadiationWattsM2().intValue());
+        weather.setPredictedEnergyScarcity(threshold);
+
+        Battery ev = new Battery(90,10);
+        participant.setEv(ev);
+
+        Pricing p = new Pricing(1000.0);
+
+        kieSession.insert(participant);
+        kieSession.insert(weather);
+        kieSession.insert(ev);
+        kieSession.insert(p);
+    }
+
+    //This scenario assumes r>1, pes yes, has ev yes, suff charged no (charge battery)
+
+    private static void bootstrapCB0(KieSession kieSession) {
+        ArrayList<Device> devices = new ArrayList<>();
+
+        Device kettle = new Device("kettle", 15, false, false);
+        devices.add(kettle);
+        Device washingMachine = new Device("washing machine", 15, false, true);
+        devices.add(washingMachine);
+        Device fridge = new Device("fridge", 30, true, true);
+        devices.add(fridge);
+        Device ac = new Device("ac", 40, true, true);
+        devices.add(ac);
+        Device aird = new Device("aird", 15, false, false);
+        devices.add(aird);
+
+        Participant participant = new Participant("1",100,devices);
+        kieSession.setGlobal("participantId", participant.getId());
+
+        Weather weather = new Weather(30.0, 300.0, 12.0);
+        int threshold = FuzzyLogic.fuzzify(weather.getWindSpeedKMH().intValue(),weather.getSolarRadiationWattsM2().intValue());
+        weather.setPredictedEnergyScarcity(threshold);
+
+        Battery ev = new Battery(10,10);
+        participant.setEv(ev);
+        ev.setThreshold(threshold);
+
+        Pricing p = new Pricing(1000.0);
+
+        kieSession.insert(participant);
+        kieSession.insert(weather);
+        kieSession.insert(ev);
+        kieSession.insert(p);
+    }
+
 }

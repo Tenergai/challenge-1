@@ -32,11 +32,8 @@ calculos:- cria_facto_consumo,
 			check_expensive_hour,
 			calcular_excess,
 			calcular_deficit,
-			write('shift load'),
 			shift_load,
-			write('shift load_deficit'),
 			shift_load_deficit(I),
-			write('improvement'),
 			check_r_improvement(I).
 
 cria_facto_consumo:-findall(X,facto(_,device(_,X)),LR),!,calcula_consumo(LR,T),
@@ -158,7 +155,8 @@ calcular_deficit:-
 calcular_ratio:-
 	facto(_,production(_,Prod)),
 	facto(_,facto_total_consumo(_,TotalConsum)),
-	Ratio is Prod / TotalConsum,
+	((TotalConsum==0, Ratio is 0,!);(
+	Ratio is Prod / TotalConsum)),
 	((call(facto(_,(ratio(this_period,Ratio)))),!);
 	(call(facto(F,(ratio(this_period,_)))),
 	retract(facto(F,(ratio(this_period,_)))),
@@ -187,7 +185,7 @@ devices(E,D):-findall([device(N,C)],(facto(_,device(N,C)), facto(_,connected(N,0
 shift_load:-
 	facto(_,(excess(this_period,E))),
 	E>0,
-	combine(E,L1),write('L1'),write(L1), flatten(L1,L), write('L'),write(L),
+	combine(E,L1),flatten(L1,L),
 	((call(facto(_,(options(this_period,L)))),!);
 	(call(facto(F,(options(this_period,_)))),
 	retract(facto(F,(options(this_period,_)))),
@@ -331,7 +329,8 @@ calcular_ratio_community:-
 
 	facto(_,production_community(_,Prod)),
 	facto(_,total_consumo_community(_,TotalConsum)),
-	Ratio is Prod / TotalConsum,
+	((TotalConsum==0, Ratio is 0,!);(
+	Ratio is Prod / TotalConsum)),
 	((call(facto(_,(community_ratio(this_period,Ratio)))),!);
 	(call(facto(F,(community_ratio(this_period,_)))),
 	retract(facto(F,(community_ratio(this_period,_)))),
