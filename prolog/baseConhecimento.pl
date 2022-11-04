@@ -2,7 +2,6 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Metaconhecimento
-%%%%%%%%%%%%Individual%%%%%%%%%%%%%%%%%%%%
 facto_dispara_regras(usertype(this_period,individual), [1,11,12,15,18,19,23,29]).
 facto_dispara_regras(ratio(this_period,_), [1,11,12,15,18,19,21,22,23,29]).
 facto_dispara_regras(predicted_scarcity(this_period,_), [1,11,12,15,18,19,25,26]).
@@ -23,7 +22,6 @@ facto_dispara_regras(r_improvement(this_period,_), [20,21,22]).
 facto_dispara_regras(can_improve_r(this_period,_), [20,21,22]).
 facto_dispara_regras(check_battery_r_equals_zero(this_period,_), [24,25,26]).
 facto_dispara_regras(check_expensive_hour_r_equals_zero(this_period, _), [27,28]).
-%%%%%%%%%%%%Community%%%%%%%%%%%%%%%%%%%%
 facto_dispara_regras(community_ratio(this_period,_),[30,33,38,40]).
 facto_dispara_regras(community_predicted_scarcity(this_period,_),[30,33,43,44,45]).
 facto_dispara_regras(community_check_battery(this_period,_),[31,32]).
@@ -33,11 +31,12 @@ facto_dispara_regras(community_demand(this_period,_),[34,35]).
 facto_dispara_regras(check_community_external_market_demand(this_period,_),[36,37]).
 facto_dispara_regras(external_market_demand(this_period,_),[36,37]).
 facto_dispara_regras(current_energy_scarcity(this_period,_),[38,40]).
-facto_dispara_regras(check_community_batteries_charged(this_period,_),[39,41],42).
-facto_dispara_regras(check_community_participants_with_surplus(this_period,_),[42]).
+facto_dispara_regras(check_community_batteries_charged(this_period,_),[39,41,42]).
+facto_dispara_regras(check_community_participants_with_surplus(this_period,_),[42,43,44,45]).
 facto_dispara_regras(participant_with_surplus(this_period,_),[42,43,44,45]).
 facto_dispara_regras(community_expensive_hour(this_period,_),[44,45]).
 facto_dispara_regras(check_community_battery_suff_charged(this_period,_),[46,47]).
+facto_dispara_regras(usertype(community), [30,33,38,40]).
 
 
 
@@ -227,11 +226,11 @@ regra 43
 	entao [cria_facto(buy_from_external_market(this_period,1))].
 
 regra 44 
-	se [participant_with_surplus(this_period,0) e community_predicted_scarcity(this_period,0) e community_expensive_hour(this_period,0)]
+	se [check_community_participants_with_surplus(this_period,1) e participant_with_surplus(this_period,0) e community_predicted_scarcity(this_period,0) e community_expensive_hour(this_period,0)]
 	entao [cria_facto(buy_from_external_market(this_period,1))].
 
 regra 45
-	se [participant_with_surplus(this_period,0) e community_predicted_scarcity(this_period,0) e community_expensive_hour(this_period,1)]
+	se [check_community_participants_with_surplus(this_period,1) e participant_with_surplus(this_period,0) e community_predicted_scarcity(this_period,0) e community_expensive_hour(this_period,1)]
 	entao [cria_facto(check_community_battery_suff_charged(this_period,1))].
 	
 regra 46 
