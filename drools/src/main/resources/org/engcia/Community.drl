@@ -675,7 +675,7 @@ rule "R32: R>0 and Cannot Improve R and Not R=1 -> Buy Cheapest Market"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         Hypothesis(description == "Improve R", value == "false")
-        eval(answer("Ratio equal to 1", "no"))
+        Participant(id == participantId, getRatio() != 1)
     then
         System.out.println("R32: R>0 and Cannot Improve R and Not R=1 -> Buy Cheapest Market");
         Conclusion c = new Conclusion(Conclusion.BUY_CHEAPEST_MARKET);
