@@ -285,7 +285,6 @@ rule "R118: Not Predicted Energy Scarcity and Expensive Hour"
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "predicted energy scarcity", value == "false")
         Period(id == id, externalDemand() == true)
-        eval(answer("expensive hour", "yes"))
     then
         System.out.println("R118: Not Predicted Energy Scarcity and Expensive Hour");
         Hypothesis h = new Hypothesis("expensive hour", "true");
@@ -297,7 +296,6 @@ rule "R119: Not Predicted Energy Scarcity and Not Expensive Hour"
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "predicted energy scarcity", value == "false")
         Period(id == id, externalDemand() == false)
-        eval(answer("expensive hour", "no"))
     then
         System.out.println("R119: Not Predicted Energy Scarcity and Not Expensive Hour");
         Conclusion c = new Conclusion(Conclusion.BUY_EXTERNAL_MARKET);
