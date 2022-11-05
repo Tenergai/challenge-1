@@ -50,7 +50,6 @@ public class DroolsTest {
         devices.add(hairDryer);
 
         Participant participant = new Participant("1", 0, devices);
-        kieSession.setGlobal("participantId", participant.getId());
 
         Weather weather = new Weather(30.0, 0.0, 0.0);
         int threshold = FuzzyLogic.fuzzify(weather.getWindSpeedKMH().intValue(), weather.getSolarRadiationWattsM2().intValue());
@@ -62,10 +61,58 @@ public class DroolsTest {
 
         Pricing p = new Pricing(1000.0);
 
+        kieSession.setGlobal("id", participant.getId());
         kieSession.insert(participant);
         kieSession.insert(weather);
         kieSession.insert(ev);
         kieSession.insert(p);
+    }
+
+    private static void bootstrapCommunity(KieSession kieSession) {
+        ArrayList<Device> devices = new ArrayList<>();
+
+        Device kettle = new Device("kettle", 1, false, true);
+        devices.add(kettle);
+        Device washingMachine = new Device("washing machine", 1, false, true);
+        devices.add(washingMachine);
+        Device fridge = new Device("fridge", 3, true, true);
+        devices.add(fridge);
+        Device ac = new Device("ac", 40, true, true);
+        devices.add(ac);
+        Device aird = new Device("aird", 15, false, true);
+        devices.add(aird);
+
+        Participant participant = new Participant("1",100,devices);
+
+        Weather weather = new Weather(30.0, 700.0, 20.0);
+        int threshold = FuzzyLogic.fuzzify(weather.getWindSpeedKMH().intValue(),weather.getSolarRadiationWattsM2().intValue());
+        weather.setPredictedEnergyScarcity(threshold);
+
+        Battery ev = new Battery(90,10);
+        participant.setEv(ev);
+        ev.setThreshold(threshold);
+
+        Device furnace = new Device("furnace",70, true, false);
+        devices = new ArrayList<>();
+        devices.add(furnace);
+
+        Participant participant1 = new Participant("2",100, devices);
+        ArrayList<Participant> participants = new ArrayList<>();
+        participants.add(participant);
+        participants.add(participant1);
+
+        Battery bat = new Battery(90,10);
+        bat.setThreshold(threshold);
+        ArrayList<Battery> batteries = new ArrayList<>();
+        batteries.add(bat);
+
+        Period period = new Period("1",participants,batteries);
+
+        Pricing p = new Pricing(1000.0);
+
+        kieSession.setGlobal("id", period.getId());
+        kieSession.insert(weather);
+        kieSession.insert(period);
     }
 
     private static void runEngine() {
@@ -109,7 +156,7 @@ public class DroolsTest {
 
             LiveQuery query = kSession.openLiveQuery("Conclusions", null, listener);
 
-            bootstrap(kSession);
+            bootstrapCommunity(kSession);
 
             kSession.fireAllRules();
             kSession.dispose();

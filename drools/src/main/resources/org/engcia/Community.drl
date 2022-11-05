@@ -8,6 +8,7 @@ import org.engcia.model.Fact;
 import org.engcia.model.Device;
 import org.engcia.model.Participant;
 import org.engcia.model.Weather;
+import org.engcia.model.Period;
 
 import function org.engcia.view.UI.answer;
 
@@ -19,7 +20,7 @@ query "Conclusions"
     $conclusion : Conclusion()
 end
 
-global java.lang.String participantId;
+global java.lang.String id;
 
 rule "R0: Is Manager"
     when
@@ -308,7 +309,7 @@ end
 rule "R201: R>1"
     when
         Hypothesis(description == "manager", value == "false")
-        Participant(id == participantId, getRatio() > 1)
+        Participant(id == id, getRatio() > 1)
     then
         System.out.println("R1 - R>1");
         Hypothesis h = new Hypothesis("R>1", "true");
@@ -320,7 +321,7 @@ rule "R202: R>1 and Predicted Energy Scarcity"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
         $w : Weather(evaluatePredictedEnergyScarcity())
-        $p : Participant(id == participantId)
+        $p : Participant(id == id)
     then
         System.out.println("R2 - R>1 and Predicted Energy Scarcity");
         $p.setEvThreshold($w.getThreshold());
@@ -334,7 +335,7 @@ rule "R203: R>1 and Not Predicted Energy Scarcity"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
         $w : Weather(!evaluatePredictedEnergyScarcity())
-        $p : Participant(id == participantId)
+        $p : Participant(id == id)
     then
         System.out.println("R3 - R>1 and Not Predicted Energy Scarcity");
         $p.setEvThreshold($w.getThreshold());
@@ -347,7 +348,7 @@ rule "R204: R>1 and Predicted Energy Scarcity and Has EV"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
         Hypothesis(description == "Predicted Energy Scarcity", value == "true")
-        Participant(id == participantId, hasEv())
+        Participant(id == id, hasEv())
     then
         System.out.println("R4 - R>1 and Predicted Energy Scarcity and Has EV");
         Hypothesis h = new Hypothesis("Has EV", "true");
@@ -359,7 +360,7 @@ rule "R205: R>1 and Predicted Energy Scarcity and Has Not EV -> Sell to the comm
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
         Hypothesis(description == "Predicted Energy Scarcity", value == "true")
-        Participant(id == participantId, hasEv() == false)
+        Participant(id == id, hasEv() == false)
     then
         System.out.println("R5 - R>1 and Predicted Energy Scarcity and Not Has EV -> Sell to the community market");
         Conclusion c = new Conclusion(Conclusion.SELL_COMMUNITY_MARKET);
@@ -371,7 +372,7 @@ rule "R206: R>1 and Has EV and Sufficiently Charged Battery -> Sell to the commu
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
         Hypothesis(description == "Has EV", value == "true")
-        $p : Participant(id == participantId, isEvSufficientlyCharged())
+        $p : Participant(id == id, isEvSufficientlyCharged())
         Hypothesis(description == "Predicted Energy Scarcity", value == "true")
     then
         System.out.println($p.isEvSufficientlyCharged());
@@ -385,7 +386,7 @@ rule "R207: R>1 and Has EV and Not Sufficiently Charged Battery"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
         Hypothesis(description == "Has EV", value == "true")
-        $p : Participant(id == participantId, isEvSufficientlyCharged() == false)
+        $p : Participant(id == id, isEvSufficientlyCharged() == false)
         Hypothesis(description == "Predicted Energy Scarcity", value == "true")
 
     then
@@ -402,7 +403,7 @@ rule "R208: R>1 and Not Predicted Energy Scarcity and Wants to shift load -> Shi
         Hypothesis(description == "R>1", value == "true")
         Hypothesis(description == "Predicted Energy Scarcity", value == "false")
         eval(answer("Wants to shift load", "yes"))
-        $p : Participant(id == participantId)
+        $p : Participant(id == id)
     then
         boolean hasDevice = chooseDevicesTurnOn($p);
         if(hasDevice){
@@ -430,7 +431,7 @@ rule "R210: R>1 and Not Wants to shift load and Has EV"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
         Hypothesis(description == "Wants to shift load", value == "false")
-        Participant(id == participantId, hasEv())
+        Participant(id == id, hasEv())
     then
         Hypothesis h = new Hypothesis("Has EV", "true");
         insert(h);
@@ -441,7 +442,7 @@ rule "R211: R>1 and Not Wants to shift load and Not Has EV -> Sell"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
         Hypothesis(description == "Wants to shift load", value == "false")
-        Participant(id == participantId, hasEv() == false)
+        Participant(id == id, hasEv() == false)
     then
         System.out.println("R13: R>1 and Not Wants to shift load and Not Has EV -> Sell");
         Conclusion c = new Conclusion(Conclusion.SELL_COMMUNITY_MARKET);
@@ -453,7 +454,7 @@ rule "R212: R>1 and Has EV and Sufficiently Charged Battery -> Sell"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
         Hypothesis(description == "Has EV", value == "true")
-        $p : Participant(id == participantId, isEvSufficientlyCharged())
+        $p : Participant(id == id, isEvSufficientlyCharged())
     then
         Conclusion c = new Conclusion(Conclusion.SELL_COMMUNITY_MARKET);
         insert(c);
@@ -464,7 +465,7 @@ rule "R213: R>1 and Has EV and Not Sufficiently Charged Battery"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
         Hypothesis(description == "Has EV", value == "true")
-        $p : Participant(id == participantId, isEvSufficientlyCharged() == false)
+        $p : Participant(id == id, isEvSufficientlyCharged() == false)
     then
         Hypothesis h = new Hypothesis("Sufficiently charged battery", "false");
         insert(h);
@@ -495,7 +496,7 @@ end
 rule "R216: Not R>1"
     when
         Hypothesis(description == "manager", value == "false")
-        Participant(id == participantId, getRatio() <= 1)
+        Participant(id == id, getRatio() <= 1)
     then
         Hypothesis h = new Hypothesis("R>1", "false");
         insert(h);
@@ -504,7 +505,7 @@ end
 rule "R217: Not R>1 and R>0"
     when
         Hypothesis(description == "manager", value == "false")
-        Participant(id == participantId, getRatio() > 0)
+        Participant(id == id, getRatio() > 0)
     then
         Hypothesis h = new Hypothesis("R>0", "true");
         insert(h);
@@ -515,7 +516,7 @@ rule "R218: R>0 and Predicted Energy Scarcity"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         $w : Weather(evaluatePredictedEnergyScarcity())
-        $p : Participant(id == participantId)
+        $p : Participant(id == id)
     then
         System.out.println("R20 - R>0 and Predicted Energy Scarcity");
         $p.setEvThreshold($w.getThreshold());
@@ -529,7 +530,7 @@ rule "R219: R>0 and Not Predicted Energy Scarcity"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         $w : Weather(!evaluatePredictedEnergyScarcity())
-        $p : Participant(id == participantId)
+        $p : Participant(id == id)
     then
         System.out.println("R21 - R>0 and Not Predicted Energy Scarcity");
         $p.setEvThreshold($w.getThreshold());
@@ -543,7 +544,7 @@ rule "R220: R>0 and Predicted Energy Scarcity and Has EV"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         Hypothesis(description == "Predicted Energy Scarcity", value == "true")
-        Participant(id == participantId, hasEv())
+        Participant(id == id, hasEv())
     then
         System.out.println("R22 - R>0 and Predicted Energy Scarcity and Has EV");
         Hypothesis h = new Hypothesis("Has EV", "true");
@@ -555,7 +556,7 @@ rule "R221: R>0 and Predicted Energy Scarcity and Not Has EV"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         Hypothesis(description == "Predicted Energy Scarcity", value == "true")
-        Participant(id == participantId, hasEv() == false)
+        Participant(id == id, hasEv() == false)
     then
         System.out.println("R23 - R>0 and Predicted Energy Scarcity and Not Has EV");
         Hypothesis h = new Hypothesis("Has EV", "false");
@@ -567,7 +568,7 @@ rule "R222: R>0 and Has EV and Sufficiently Charged Battery"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         Hypothesis(description == "Has EV", value == "true")
-        $p : Participant(id == participantId, isEvSufficientlyCharged())
+        $p : Participant(id == id, isEvSufficientlyCharged())
     then
         System.out.println("R24: R>0 and Has EV and Sufficiently Charged Battery");
         Hypothesis h = new Hypothesis("Sufficiently Charged Battery", "true");
@@ -579,7 +580,7 @@ rule "R223: R>0 and Has EV and Not Sufficiently Charged Battery -> Charge Batter
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         Hypothesis(description == "Has EV", value == "true")
-        $p : Participant(id == participantId, isEvSufficientlyCharged() == false)
+        $p : Participant(id == id, isEvSufficientlyCharged() == false)
     then
         System.out.println("R25: R>0 and Has EV and Not Sufficiently Charged Battery -> Charge Battery");
         Conclusion c = new Conclusion(Conclusion.CHARGE_BATTERY);
@@ -670,7 +671,7 @@ rule "R230: R>0 and Cannot Improve R and Not R=1 -> Buy Cheapest Market"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         Hypothesis(description == "Improve R", value == "false")
-        Participant(id == participantId, getRatio() != 1)
+        Participant(id == id, getRatio() != 1)
     then
         System.out.println("R32: R>0 and Cannot Improve R and Not R=1 -> Buy Cheapest Market");
         Conclusion c = new Conclusion(Conclusion.BUY_CHEAPEST_MARKET);
@@ -682,7 +683,7 @@ rule "R231: R>0 and Cannot Improve R and R=1 -> No operation needed"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         Hypothesis(description == "Improve R", value == "false")
-        Participant(id == participantId, getRatio() == 1)
+        Participant(id == id, getRatio() == 1)
     then
         System.out.println("R33: R>0 and Cannot Improve R and R=1 -> No operation needed");
         Conclusion c = new Conclusion(Conclusion.NO_OPERATION_NEEDED);
@@ -692,7 +693,7 @@ end
 rule "R232: Not R>0"
     when
         Hypothesis(description == "manager", value == "false")
-        Participant(id == participantId, getRatio() == 0)
+        Participant(id == id, getRatio() == 0)
     then
         System.out.println("R34: Not R>0");
         Hypothesis h = new Hypothesis("R>0", "false");
@@ -703,7 +704,7 @@ rule "R233: Not R>0 and Has EV"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "false")
-        Participant(id == participantId, hasEv())
+        Participant(id == id, hasEv())
     then
         System.out.println("R35: Not R>0 and Has EV");
         Hypothesis h = new Hypothesis("Has EV", "true");
@@ -714,7 +715,7 @@ rule "R234: Not R>0 and Not Has EV"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "false")
-        Participant(id == participantId, hasEv() == false)
+        Participant(id == id, hasEv() == false)
     then
         System.out.println("R36: Not R>0 and Not Has EV");
         Hypothesis h = new Hypothesis("Has EV", "false");
@@ -726,7 +727,7 @@ rule "R235: Not R>0 and Not Sufficiently Charged Battery -> Charge"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "false")
         Hypothesis(description == "Has EV", value == "true")
-        $p : Participant(id == participantId, isEvSufficientlyCharged() == false)
+        $p : Participant(id == id, isEvSufficientlyCharged() == false)
     then
         System.out.println("R37: Not R>0 and Not Sufficiently Charged Battery -> Charge");
         Conclusion c = new Conclusion(Conclusion.CHARGE_BATTERY);
@@ -738,7 +739,7 @@ rule "R236: Not R>0 and Sufficiently Charged Battery"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "false")
         Hypothesis(description == "Has EV", value == "true")
-        $p : Participant(id == participantId, isEvSufficientlyCharged())
+        $p : Participant(id == id, isEvSufficientlyCharged())
     then
         System.out.println("R38: Not R>0 and Sufficiently Charged Battery");
         Hypothesis h = new Hypothesis("Sufficiently Charged Battery", "true");
@@ -751,7 +752,7 @@ rule "R237: Not R>0 and Sufficiently Charged Battery and Predicted Energy Scarci
         Hypothesis(description == "R>0", value == "false")
         Hypothesis(description == "Sufficiently Charged Battery", value == "true")
         $w : Weather(evaluatePredictedEnergyScarcity())
-        $p : Participant(id == participantId)
+        $p : Participant(id == id)
     then
         System.out.println("R39: Not R>0 and Sufficiently Charged Battery and Predicted Energy Scarcity");
         $p.setEvThreshold($w.getThreshold());
@@ -766,7 +767,7 @@ rule "R238: Not R>0 and Sufficiently Charged Battery and Not Predicted Energy Sc
         Hypothesis(description == "R>0", value == "false")
         Hypothesis(description == "Sufficiently Charged Battery", value == "true")
         $w : Weather(!evaluatePredictedEnergyScarcity())
-        $p : Participant(id == participantId)
+        $p : Participant(id == id)
     then
         System.out.println("R40: Not R>0 and Sufficiently Charged Battery and Not Predicted Energy Scarcity -> Use Battery");
         $p.setEvThreshold($w.getThreshold());

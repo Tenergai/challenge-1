@@ -4,13 +4,16 @@ import java.util.List;
 
 public class Period {
 
+    private String id;
+
     private String datetimePeriod;
     private List<Participant> participants;
     Weather weather;
     private List<Battery> batteries;
     Pricing pricing;
 
-    public Period(List<Participant> participants, List<Battery> batteries) {
+    public Period(String id, List<Participant> participants, List<Battery> batteries) {
+        this.id = id;
         this.participants = participants;
         this.batteries = batteries;
     }
@@ -48,5 +51,9 @@ public class Period {
                 return false;
         }
         return true;
+    }
+
+    public String getId() {
+        return this.id;
     }
 }
