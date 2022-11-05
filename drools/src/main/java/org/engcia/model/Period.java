@@ -14,7 +14,9 @@ public class Period {
 
     private double production;
 
-    Weather weather;
+    private Weather weather;
+
+    private int threshold;
     private List<Battery> batteries;
 
     Pricing pricingCommunity;
@@ -33,13 +35,14 @@ public class Period {
         this.setCommunityMarketPricing();
     }
 
-    public Period(String id, List<Participant> participants, List<Battery> batteries, Pricing externalMarketPrice) {
+    public Period(String id, List<Participant> participants, List<Battery> batteries, Pricing externalMarketPrice, Weather weather,int thresholdNow) {
         this.id = id;
         this.participants = participants;
         this.batteries = batteries;
         this.getPC();
         this.pricingExternalMarket = externalMarketPrice;
         this.setCommunityMarketPricing();
+        this.weather = weather;
     }
 
     public void getPC(){
@@ -52,6 +55,18 @@ public class Period {
 
         this.setConsumption(consumption);
         this.setProduction(production);
+    }
+    /*
+    This function will return true if all batteries are above the minimum required threshold
+     */
+    public boolean batAboveT(){
+        for (Battery b:
+             this.getBatteries()) {
+            if (b.getCurrentCharge()<threshold){
+                return false;
+            }
+        }
+        return true;
     }
     public double getRatio(){
         return this.getProduction()/this.getConsumption();

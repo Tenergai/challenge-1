@@ -72,9 +72,13 @@ public class DroolsTest {
 
 
         //gets bat threshold from weather info
-        Weather weather = new Weather(30.0, 0.0, 0.0);
-        int threshold = FuzzyLogic.fuzzify(weather.getWindSpeedKMH().intValue(),weather.getSolarRadiationWattsM2().intValue());
-        weather.setPredictedEnergyScarcity(threshold);
+        Weather weatherPredict = new Weather(30.0, 700.0, 21.0);
+        int threshold = FuzzyLogic.fuzzify(weatherPredict.getWindSpeedKMH().intValue(), weatherPredict.getSolarRadiationWattsM2().intValue());
+        weatherPredict.setPredictedEnergyScarcity(threshold);
+
+        Weather weatherNow = new Weather(30.0, 700.0, 21.0);
+        int thresholdNow = FuzzyLogic.fuzzify(weatherNow.getWindSpeedKMH().intValue(), weatherNow.getSolarRadiationWattsM2().intValue());
+        weatherNow.setPredictedEnergyScarcity(thresholdNow);
 
         //creates bootstrap devices
         Device kettle = new Device("kettle", 1, false, true);
@@ -82,7 +86,7 @@ public class DroolsTest {
         Device fridge = new Device("fridge", 30, true, true);
         Device ac = new Device("ac", 40, true, true);
         Device aird = new Device("aird", 15, false, true);
-        Device furnace = new Device("furnace",70, true, true);
+        Device furnace = new Device("furnace", 70, true, true);
 
         //participant 1
         ArrayList<Device> devices = new ArrayList<>();
@@ -91,16 +95,16 @@ public class DroolsTest {
         devices.add(fridge);
         devices.add(ac);
         devices.add(aird);
-        Participant participant1 = new Participant("1",1000,devices);
+        Participant participant1 = new Participant("1", 1, devices);
 
         //participant 2
         ArrayList<Device> devices2 = new ArrayList<>();
-        devices.add(furnace);
-        Participant participant2 = new Participant("2",1000, devices2);
+        devices2.add(furnace);
+        Participant participant2 = new Participant("2", 1, devices2);
 
         //participant 3
         ArrayList<Device> devices3 = new ArrayList<>();
-        Participant participant3 = new Participant("3",1000, devices3);
+        Participant participant3 = new Participant("3", 0, devices3);
 
         //list of participants
         ArrayList<Participant> participants = new ArrayList<>();
@@ -109,16 +113,17 @@ public class DroolsTest {
         participants.add(participant3);
 
         //creates battery
-        Battery bat = new Battery(90,10);
-        //bat.setThreshold(threshold);
+        Battery bat = new Battery(10, 10);
+        bat.setThreshold(thresholdNow);
         ArrayList<Battery> batteries = new ArrayList<>();
         batteries.add(bat);
 
         Pricing p = new Pricing(50.0);
-        Period period = new Period("1",participants,batteries,p);
+
+        Period period = new Period("1", participants, batteries, p, weatherNow, thresholdNow);
 
         kieSession.setGlobal("id", period.getId());
-        kieSession.insert(weather);
+        kieSession.insert(weatherPredict);
         kieSession.insert(period);
     }
 
@@ -233,7 +238,7 @@ public class DroolsTest {
         Scanner sc = new Scanner(System.in);
         System.out.println("Which device do you want to turn off?");
         int devi = sc.nextInt();
-        if (devi==-1)return false;
+        if (devi == -1) return false;
         Device dev = participant.getDevices().get(devi);
         dev.turnOn();
         return true;

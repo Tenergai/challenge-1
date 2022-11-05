@@ -173,7 +173,7 @@ rule "R111: R equal or less than 1 and Currently in Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "equal or less")
-        eval(answer("currently in energy scarcity", "yes"))
+        Period(id == id, getWeather().evaluatePredictedEnergyScarcity() == true)/////////////////////////////////////////aqui
     then
         System.out.println("R111: R equal or less than 1 and Currently in Energy Scarcity");
         Hypothesis h = new Hypothesis("currently in energy scarcity", "true");
@@ -184,7 +184,7 @@ rule "R112: R equal or less than 1 and Not Currently in Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "equal or less")
-        eval(answer("currently in energy scarcity", "no"))
+        Period(id == id, getWeather().evaluatePredictedEnergyScarcity() == false)
     then
         System.out.println("R112: R equal or less than 1 and Not Currently in Energy Scarcity");
         Hypothesis h = new Hypothesis("currently in energy scarcity", "false");
@@ -265,7 +265,7 @@ rule "R116: Not Participant with surplus and Predicted Energy Scarcity"
         $w : Weather(evaluatePredictedEnergyScarcity())
     then
         System.out.println("R116: Not Participant with surplus and Predicted Energy Scarcity");
-        Conclusion c = new Conclusion(Conclusion.ADJUST_THRESHOLD);
+        Conclusion c = new Conclusion(Conclusion.BUY_EXTERNAL_MARKET);
         insert(c);
 end
 
@@ -284,6 +284,7 @@ rule "R118: Not Predicted Energy Scarcity and Expensive Hour"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "predicted energy scarcity", value == "false")
+        Period(id == id, externalDemand() == true)
         eval(answer("expensive hour", "yes"))
     then
         System.out.println("R118: Not Predicted Energy Scarcity and Expensive Hour");
@@ -295,6 +296,7 @@ rule "R119: Not Predicted Energy Scarcity and Not Expensive Hour"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "predicted energy scarcity", value == "false")
+        Period(id == id, externalDemand() == false)
         eval(answer("expensive hour", "no"))
     then
         System.out.println("R119: Not Predicted Energy Scarcity and Not Expensive Hour");
