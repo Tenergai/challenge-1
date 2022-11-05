@@ -185,7 +185,7 @@ rule "R113: Currently in Energy Scarcity and Batteries are charged"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "currently in energy scarcity", value == "true")
-        eval(answer("batteries are charged", "yes"))
+        $p : Period(id == id, areBatteriesSufficientlyCharged())
     then
         Conclusion c = new Conclusion(Conclusion.USE_BATTERY);
         insert(c);
@@ -195,7 +195,7 @@ rule "R114: Currently in Energy Scarcity and Batteries are not charged"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "currently in energy scarcity", value == "true")
-        eval(answer("batteries are charged", "no"))
+        $p : Period(id == id, areBatteriesSufficientlyCharged() == false)
     then
         Hypothesis h = new Hypothesis("batteries are charged", "false");
         insert(h);
@@ -205,7 +205,7 @@ rule "R115.1: Not Currently in Energy Scarcity and no Participant with surplus"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "currently in energy scarcity", value == "false")
-        eval(answer("participants with surplus", "no"))
+        $p : Period(id == id, participantsWithSurplus() == false)
     then
         //participants with surplus?
         Hypothesis h = new Hypothesis("participants with surplus", "false");
@@ -216,7 +216,7 @@ rule "R115.2: Not Currently in Energy Scarcity and Participant with surplus"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "currently in energy scarcity", value == "false")
-        eval(answer("participants with surplus", "yes"))
+        $p : Period(id == id, participantsWithSurplus())
     then
         Conclusion c = new Conclusion(Conclusion.BALANCE_R);
         insert(c);
@@ -227,7 +227,7 @@ rule "R116.1: Batteries are not charged and no Participant with surplus"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "batteries are charged", value == "false")
-        eval(answer("participants with surplus", "no"))
+        $p : Period(id == id, participantsWithSurplus() == false)
     then
         Hypothesis h = new Hypothesis("participants with surplus", "false");
         insert(h);
@@ -237,7 +237,7 @@ rule "R116.2: Batteries are not charged and Participant with surplus"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "batteries are charged", value == "false")
-        eval(answer("participants with surplus", "yes"))
+        $p : Period(id == id, participantsWithSurplus())
     then
         Conclusion c = new Conclusion(Conclusion.BALANCE_R);
         insert(c);
@@ -247,7 +247,7 @@ rule "R116: Not Participant with surplus and Predicted Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "participants with surplus", value == "false")
-        eval(answer("predicted energy scarcity", "yes"))
+        $w : Weather(evaluatePredictedEnergyScarcity())
     then
         Conclusion c = new Conclusion(Conclusion.ADJUST_THRESHOLD);
         insert(c);
@@ -257,7 +257,7 @@ rule "R117: Not Participant with surplus and Not Predicted Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "participants with surplus", value == "false")
-        eval(answer("predicted energy scarcity", "no"))
+        $w : Weather(!evaluatePredictedEnergyScarcity())
     then
         Hypothesis h = new Hypothesis("predicted energy scarcity", "false");
         insert(h);
@@ -287,7 +287,7 @@ rule "R120: Expensive Hour and Sufficiently Charged Battery"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "expensive hour", value == "true")
-        eval(answer("sufficiently charged battery", "yes"))
+        $p : Period(id == id, areBatteriesSufficientlyCharged())
     then
         Conclusion c = new Conclusion(Conclusion.USE_BATTERY);
         insert(c);
@@ -297,7 +297,7 @@ rule "R120.1: Expensive Hour and Not Sufficiently Charged Battery"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "expensive hour", value == "true")
-        eval(answer("sufficiently charged battery", "no"))
+        $p : Period(id == id, areBatteriesSufficientlyCharged() == false)
     then
         Conclusion c = new Conclusion(Conclusion.BUY_EXTERNAL_MARKET);
         insert(c);
