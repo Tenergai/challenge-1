@@ -156,7 +156,7 @@ public class DroolsTest {
 
             LiveQuery query = kSession.openLiveQuery("Conclusions", null, listener);
 
-            bootstrapCommunity(kSession);
+            bootstrap(kSession);
 
             kSession.fireAllRules();
             kSession.dispose();
