@@ -38,21 +38,21 @@ public class DroolsTest {
         //bootstrapExpensiveHourR1(kieSession);
         ArrayList<Device> devices = new ArrayList<>();
 
-        Device kettle = new Device("kettle", 1, false, true);
+        Device kettle = new Device("kettle", 1, false, false);
         devices.add(kettle);
-        Device washingMachine = new Device("washing machine", 1, false, true);
+        Device washingMachine = new Device("washing machine", 1, false, false);
         devices.add(washingMachine);
         Device fridge = new Device("fridge", 3, true, true);
         devices.add(fridge);
         Device ac = new Device("ac", 90, true, true);
         devices.add(ac);
-        Device hairDryer = new Device("hairDryer", 15, false, true);
+        Device hairDryer = new Device("hairDryer", 17, false, true);
         devices.add(hairDryer);
 
-        Participant participant = new Participant("1", 100, devices);
+        Participant participant = new Participant("1", 0, devices);
         kieSession.setGlobal("participantId", participant.getId());
 
-        Weather weather = new Weather(30.0, 900.0, 21.0);
+        Weather weather = new Weather(30.0, 0.0, 0.0);
         int threshold = FuzzyLogic.fuzzify(weather.getWindSpeedKMH().intValue(), weather.getSolarRadiationWattsM2().intValue());
         weather.setPredictedEnergyScarcity(threshold);
 

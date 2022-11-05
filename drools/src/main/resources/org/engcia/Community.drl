@@ -29,7 +29,7 @@ rule "R0: Is Manager"
         insert(h);
 end
 
-rule "R1: Ratio greater than 1"
+rule "R101: Ratio greater than 1"
     when
         Hypothesis(description == "manager", value == "true")
         eval(answer("Ratio greater than 1", "yes"))
@@ -38,16 +38,17 @@ rule "R1: Ratio greater than 1"
         insert(h);
 end
 
-rule "R2: Ratio equal or less than 1"
+rule "R102: Ratio equal or less than 1"
     when
         Hypothesis(description == "manager", value == "true")
         eval(answer("Ratio greater than 1", "no"))
     then
+
         Hypothesis h = new Hypothesis("R", "equal or less");
         insert(h);
 end
 
-rule "R3: Ratio greater than 1 and Predicted Energy Scarcity"
+rule "R103: Ratio greater than 1 and Predicted Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
@@ -57,7 +58,7 @@ rule "R3: Ratio greater than 1 and Predicted Energy Scarcity"
         insert(h);
 end
 
-rule "R4: Ratio greater than 1 and Not Predicted Energy Scarcity"
+rule "R104: Ratio greater than 1 and Not Predicted Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
@@ -67,7 +68,7 @@ rule "R4: Ratio greater than 1 and Not Predicted Energy Scarcity"
         insert(h);
 end
 
-rule "R5: Ratio greater than 1 and PES and Battery Sufficiently Charged"
+rule "R105: Ratio greater than 1 and PES and Battery Sufficiently Charged"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
@@ -78,7 +79,7 @@ rule "R5: Ratio greater than 1 and PES and Battery Sufficiently Charged"
         insert(c);
 end
 
-rule "R6: Ratio greater than 1 and PES and Not Battery Sufficiently Charged"
+rule "R106: Ratio greater than 1 and PES and Not Battery Sufficiently Charged"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
@@ -89,7 +90,7 @@ rule "R6: Ratio greater than 1 and PES and Not Battery Sufficiently Charged"
         insert(h);
 end
 
-rule "R7.1: Ratio greater than 1 and Battery Sufficiently Charged and Community Demand"
+rule "R107.1: Ratio greater than 1 and Battery Sufficiently Charged and Community Demand"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
@@ -100,7 +101,7 @@ rule "R7.1: Ratio greater than 1 and Battery Sufficiently Charged and Community 
         insert(c);
 end
 
-rule "R7.2: Ratio greater than 1 and Battery Sufficiently Charged and not Community Demand"
+rule "R107.2: Ratio greater than 1 and Battery Sufficiently Charged and not Community Demand"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
@@ -111,7 +112,7 @@ rule "R7.2: Ratio greater than 1 and Battery Sufficiently Charged and not Commun
         insert(h);
 end
 
-rule "R8.1: Ratio greater than 1 and not PES and Community Demand"
+rule "R108.1: Ratio greater than 1 and not PES and Community Demand"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
@@ -122,7 +123,7 @@ rule "R8.1: Ratio greater than 1 and not PES and Community Demand"
         insert(c);
 end
 
-rule "R8.2: Ratio greater than 1 and not PES and not Community Demand"
+rule "R108.2: Ratio greater than 1 and not PES and not Community Demand"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
@@ -133,7 +134,7 @@ rule "R8.2: Ratio greater than 1 and not PES and not Community Demand"
         insert(h);
 end
 
-rule "R9: Ratio greater than 1 and Not Community Demand and External Market Demand"
+rule "R109: Ratio greater than 1 and Not Community Demand and External Market Demand"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
@@ -144,7 +145,7 @@ rule "R9: Ratio greater than 1 and Not Community Demand and External Market Dema
         insert(c);
 end
 
-rule "R10: Ratio greater than 1 and Not Community Demand and External Market Demand"
+rule "R110: Ratio greater than 1 and Not Community Demand and External Market Demand"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
@@ -156,7 +157,7 @@ rule "R10: Ratio greater than 1 and Not Community Demand and External Market Dem
 end
 
 
-rule "R11: R equal or less than 1 and Currently in Energy Scarcity"
+rule "R111: R equal or less than 1 and Currently in Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "equal or less")
@@ -166,7 +167,7 @@ rule "R11: R equal or less than 1 and Currently in Energy Scarcity"
         insert(h);
 end
 
-rule "R12: R equal or less than 1 and Not Currently in Energy Scarcity"
+rule "R112: R equal or less than 1 and Not Currently in Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "equal or less")
@@ -176,7 +177,7 @@ rule "R12: R equal or less than 1 and Not Currently in Energy Scarcity"
         insert(h);
 end
 
-rule "R13: Currently in Energy Scarcity and Batteries are charged"
+rule "R113: Currently in Energy Scarcity and Batteries are charged"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "currently in energy scarcity", value == "true")
@@ -186,7 +187,7 @@ rule "R13: Currently in Energy Scarcity and Batteries are charged"
         insert(c);
 end
 
-rule "R14: Currently in Energy Scarcity and Batteries are not charged"
+rule "R114: Currently in Energy Scarcity and Batteries are not charged"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "currently in energy scarcity", value == "true")
@@ -196,7 +197,7 @@ rule "R14: Currently in Energy Scarcity and Batteries are not charged"
         insert(h);
 end
 
-rule "R15.1: Not Currently in Energy Scarcity and no Participant with surplus"
+rule "R115.1: Not Currently in Energy Scarcity and no Participant with surplus"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "currently in energy scarcity", value == "false")
@@ -207,7 +208,7 @@ rule "R15.1: Not Currently in Energy Scarcity and no Participant with surplus"
         insert(h);
 end
 
-rule "R15.2: Not Currently in Energy Scarcity and Participant with surplus"
+rule "R115.2: Not Currently in Energy Scarcity and Participant with surplus"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "currently in energy scarcity", value == "false")
@@ -218,7 +219,7 @@ rule "R15.2: Not Currently in Energy Scarcity and Participant with surplus"
 end
 
 
-rule "R16.1: Batteries are not charged and no Participant with surplus"
+rule "R116.1: Batteries are not charged and no Participant with surplus"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "batteries are charged", value == "false")
@@ -228,7 +229,7 @@ rule "R16.1: Batteries are not charged and no Participant with surplus"
         insert(h);
 end
 
-rule "R16.2: Batteries are not charged and Participant with surplus"
+rule "R116.2: Batteries are not charged and Participant with surplus"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "batteries are charged", value == "false")
@@ -238,7 +239,7 @@ rule "R16.2: Batteries are not charged and Participant with surplus"
         insert(c);
 end
 
-rule "R16: Not Participant with surplus and Predicted Energy Scarcity"
+rule "R116: Not Participant with surplus and Predicted Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "participants with surplus", value == "false")
@@ -248,7 +249,7 @@ rule "R16: Not Participant with surplus and Predicted Energy Scarcity"
         insert(c);
 end
 
-rule "R17: Not Participant with surplus and Not Predicted Energy Scarcity"
+rule "R117: Not Participant with surplus and Not Predicted Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "participants with surplus", value == "false")
@@ -258,7 +259,7 @@ rule "R17: Not Participant with surplus and Not Predicted Energy Scarcity"
         insert(h);
 end
 
-rule "R18: Not Predicted Energy Scarcity and Expensive Hour"
+rule "R118: Not Predicted Energy Scarcity and Expensive Hour"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "predicted energy scarcity", value == "false")
@@ -268,7 +269,7 @@ rule "R18: Not Predicted Energy Scarcity and Expensive Hour"
         insert(h);
 end
 
-rule "R19: Not Predicted Energy Scarcity and Not Expensive Hour"
+rule "R119: Not Predicted Energy Scarcity and Not Expensive Hour"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "predicted energy scarcity", value == "false")
@@ -278,7 +279,7 @@ rule "R19: Not Predicted Energy Scarcity and Not Expensive Hour"
         insert(c);
 end
 
-rule "R20: Expensive Hour and Sufficiently Charged Battery"
+rule "R120: Expensive Hour and Sufficiently Charged Battery"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "expensive hour", value == "true")
@@ -288,7 +289,7 @@ rule "R20: Expensive Hour and Sufficiently Charged Battery"
         insert(c);
 end
 
-rule "R20: Expensive Hour and Not Sufficiently Charged Battery"
+rule "R120.1: Expensive Hour and Not Sufficiently Charged Battery"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "expensive hour", value == "true")
@@ -304,7 +305,7 @@ rule "R01: Is Participant"
         Hypothesis h = new Hypothesis("manager", "false");
         insert(h);
 end
-rule "R1: R>1"
+rule "R201: R>1"
     when
         Hypothesis(description == "manager", value == "false")
         Participant(id == participantId, getRatio() > 1)
@@ -314,7 +315,7 @@ rule "R1: R>1"
         insert(h);
 end
 
-rule "R2: R>1 and Predicted Energy Scarcity"
+rule "R202: R>1 and Predicted Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
@@ -328,7 +329,7 @@ rule "R2: R>1 and Predicted Energy Scarcity"
         insert(h);
 end
 
-rule "R3: R>1 and Not Predicted Energy Scarcity"
+rule "R203: R>1 and Not Predicted Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
@@ -341,7 +342,7 @@ rule "R3: R>1 and Not Predicted Energy Scarcity"
         insert(h);
 end
 
-rule "R4: R>1 and Predicted Energy Scarcity and Has EV"
+rule "R204: R>1 and Predicted Energy Scarcity and Has EV"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
@@ -353,7 +354,7 @@ rule "R4: R>1 and Predicted Energy Scarcity and Has EV"
         insert(h);
 end
 
-rule "R5: R>1 and Predicted Energy Scarcity and Has Not EV -> Sell to the community market"
+rule "R205: R>1 and Predicted Energy Scarcity and Has Not EV -> Sell to the community market"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
@@ -365,7 +366,7 @@ rule "R5: R>1 and Predicted Energy Scarcity and Has Not EV -> Sell to the commun
         insert(c);
 end
 
-rule "R6: R>1 and Has EV and Sufficiently Charged Battery -> Sell to the community market"
+rule "R206: R>1 and Has EV and Sufficiently Charged Battery -> Sell to the community market"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
@@ -379,7 +380,7 @@ rule "R6: R>1 and Has EV and Sufficiently Charged Battery -> Sell to the communi
         insert(c);
 end
 
-rule "R7: R>1 and Has EV and Not Sufficiently Charged Battery"
+rule "R207: R>1 and Has EV and Not Sufficiently Charged Battery"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
@@ -395,7 +396,7 @@ rule "R7: R>1 and Has EV and Not Sufficiently Charged Battery"
 end
 
 
-rule "R10: R>1 and Not Predicted Energy Scarcity and Wants to shift load -> Shift Load"
+rule "R208: R>1 and Not Predicted Energy Scarcity and Wants to shift load -> Shift Load"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
@@ -413,7 +414,7 @@ rule "R10: R>1 and Not Predicted Energy Scarcity and Wants to shift load -> Shif
         }
 end
 
-rule "R11: R>1 and Not Predicted Energy Scarcity and Not Wants to shift load"
+rule "R209: R>1 and Not Predicted Energy Scarcity and Not Wants to shift load"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
@@ -424,7 +425,7 @@ rule "R11: R>1 and Not Predicted Energy Scarcity and Not Wants to shift load"
         insert(h);
 end
 
-rule "R12: R>1 and Not Wants to shift load and Has EV"
+rule "R210: R>1 and Not Wants to shift load and Has EV"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
@@ -435,7 +436,7 @@ rule "R12: R>1 and Not Wants to shift load and Has EV"
         insert(h);
 end
 
-rule "R13: R>1 and Not Wants to shift load and Not Has EV -> Sell"
+rule "R211: R>1 and Not Wants to shift load and Not Has EV -> Sell"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
@@ -447,7 +448,7 @@ rule "R13: R>1 and Not Wants to shift load and Not Has EV -> Sell"
         insert(c);
 end
 
-rule "R14: R>1 and Has EV and Sufficiently Charged Battery -> Sell"
+rule "R212: R>1 and Has EV and Sufficiently Charged Battery -> Sell"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
@@ -458,7 +459,7 @@ rule "R14: R>1 and Has EV and Sufficiently Charged Battery -> Sell"
         insert(c);
 end
 
-rule "R15: R>1 and Has EV and Not Sufficiently Charged Battery"
+rule "R213: R>1 and Has EV and Not Sufficiently Charged Battery"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
@@ -469,7 +470,7 @@ rule "R15: R>1 and Has EV and Not Sufficiently Charged Battery"
         insert(h);
 end
 
-rule "R16: R>1 and Not Sufficiently Charged Battery and Expensive Hour -> Sell"
+rule "R214: R>1 and Not Sufficiently Charged Battery and Expensive Hour -> Sell"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
@@ -480,7 +481,7 @@ rule "R16: R>1 and Not Sufficiently Charged Battery and Expensive Hour -> Sell"
         insert(c);
 end
 
-rule "R17: R>1 and Not Sufficiently Charged Battery and Not Expensive Hour -> Charge Battery"
+rule "R215: R>1 and Not Sufficiently Charged Battery and Not Expensive Hour -> Charge Battery"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
@@ -491,7 +492,7 @@ rule "R17: R>1 and Not Sufficiently Charged Battery and Not Expensive Hour -> Ch
         insert(c);
 end
 
-rule "R18: Not R>1"
+rule "R216: Not R>1"
     when
         Hypothesis(description == "manager", value == "false")
         Participant(id == participantId, getRatio() <= 1)
@@ -500,7 +501,7 @@ rule "R18: Not R>1"
         insert(h);
 end
 
-rule "R19: Not R>1 and R>0"
+rule "R217: Not R>1 and R>0"
     when
         Hypothesis(description == "manager", value == "false")
         Participant(id == participantId, getRatio() > 0)
@@ -509,7 +510,7 @@ rule "R19: Not R>1 and R>0"
         insert(h);
 end
 
-rule "R20: R>0 and Predicted Energy Scarcity"
+rule "R218: R>0 and Predicted Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
@@ -523,7 +524,7 @@ rule "R20: R>0 and Predicted Energy Scarcity"
         insert(h);
 end
 
-rule "R21: R>0 and Not Predicted Energy Scarcity"
+rule "R219: R>0 and Not Predicted Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
@@ -537,7 +538,7 @@ rule "R21: R>0 and Not Predicted Energy Scarcity"
         insert(h);
 end
 
-rule "R22: R>0 and Predicted Energy Scarcity and Has EV"
+rule "R220: R>0 and Predicted Energy Scarcity and Has EV"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
@@ -549,7 +550,7 @@ rule "R22: R>0 and Predicted Energy Scarcity and Has EV"
         insert(h);
 end
 
-rule "R23: R>0 and Predicted Energy Scarcity and Not Has EV"
+rule "R221: R>0 and Predicted Energy Scarcity and Not Has EV"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
@@ -561,7 +562,7 @@ rule "R23: R>0 and Predicted Energy Scarcity and Not Has EV"
         insert(h);
 end
 
-rule "R24: R>0 and Has EV and Sufficiently Charged Battery"
+rule "R222: R>0 and Has EV and Sufficiently Charged Battery"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
@@ -573,7 +574,7 @@ rule "R24: R>0 and Has EV and Sufficiently Charged Battery"
         insert(h);
 end
 
-rule "R25: R>0 and Has EV and Not Sufficiently Charged Battery -> Charge Battery"
+rule "R223: R>0 and Has EV and Not Sufficiently Charged Battery -> Charge Battery"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
@@ -585,7 +586,7 @@ rule "R25: R>0 and Has EV and Not Sufficiently Charged Battery -> Charge Battery
         insert(c);
 end
 
-rule "R26: R>0 and Not Predicted Energy Scarcity and Can Improve R -> Improve R"
+rule "R224: R>0 and Not Predicted Energy Scarcity and Can Improve R -> Improve R"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
@@ -604,7 +605,7 @@ rule "R26: R>0 and Not Predicted Energy Scarcity and Can Improve R -> Improve R"
         }
 end
 
-rule "R27: R>0 and Not Has EV and Can Improve R -> Improve R"
+rule "R225: R>0 and Not Has EV and Can Improve R -> Improve R"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
@@ -616,7 +617,7 @@ rule "R27: R>0 and Not Has EV and Can Improve R -> Improve R"
         insert(c);
 end
 
-rule "R28: R>0 and Sufficiently Charged Battery and Can Improve R -> Improve R"
+rule "R226: R>0 and Sufficiently Charged Battery and Can Improve R -> Improve R"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
@@ -628,7 +629,7 @@ rule "R28: R>0 and Sufficiently Charged Battery and Can Improve R -> Improve R"
         insert(c);
 end
 
-rule "R29: R>0 and Not Predicted Energy Scarcity and Cannot Improve R"
+rule "R227: R>0 and Not Predicted Energy Scarcity and Cannot Improve R"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
@@ -640,7 +641,7 @@ rule "R29: R>0 and Not Predicted Energy Scarcity and Cannot Improve R"
         insert(h);
 end
 
-rule "R30: R>0 and Not Has EV and Cannot Improve R"
+rule "R228: R>0 and Not Has EV and Cannot Improve R"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
@@ -652,7 +653,7 @@ rule "R30: R>0 and Not Has EV and Cannot Improve R"
         insert(h);
 end
 
-rule "R31: R>0 and Sufficiently Charged Battery and Cannot Improve R"
+rule "R229: R>0 and Sufficiently Charged Battery and Cannot Improve R"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
@@ -664,7 +665,7 @@ rule "R31: R>0 and Sufficiently Charged Battery and Cannot Improve R"
         insert(h);
 end
 
-rule "R32: R>0 and Cannot Improve R and Not R=1 -> Buy Cheapest Market"
+rule "R230: R>0 and Cannot Improve R and Not R=1 -> Buy Cheapest Market"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
@@ -676,7 +677,7 @@ rule "R32: R>0 and Cannot Improve R and Not R=1 -> Buy Cheapest Market"
         insert(c);
 end
 
-rule "R33: R>0 and Cannot Improve R and R=1 -> No operation needed"
+rule "R231: R>0 and Cannot Improve R and R=1 -> No operation needed"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
@@ -688,7 +689,7 @@ rule "R33: R>0 and Cannot Improve R and R=1 -> No operation needed"
         insert(c);
 end
 
-rule "R34: Not R>0"
+rule "R232: Not R>0"
     when
         Hypothesis(description == "manager", value == "false")
         Participant(id == participantId, getRatio() == 0)
@@ -698,7 +699,7 @@ rule "R34: Not R>0"
         insert(h);
 end
 
-rule "R35: Not R>0 and Has EV"
+rule "R233: Not R>0 and Has EV"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "false")
@@ -709,7 +710,7 @@ rule "R35: Not R>0 and Has EV"
         insert(h);
 end
 
-rule "R36: Not R>0 and Not Has EV"
+rule "R234: Not R>0 and Not Has EV"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "false")
@@ -720,10 +721,11 @@ rule "R36: Not R>0 and Not Has EV"
         insert(h);
 end
 
-rule "R37: Not R>0 and Not Sufficiently Charged Battery -> Charge"
+rule "R235: Not R>0 and Not Sufficiently Charged Battery -> Charge"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "false")
+        Hypothesis(description == "Has EV", value == "true")
         $p : Participant(id == participantId, isEvSufficientlyCharged() == false)
     then
         System.out.println("R37: Not R>0 and Not Sufficiently Charged Battery -> Charge");
@@ -731,10 +733,11 @@ rule "R37: Not R>0 and Not Sufficiently Charged Battery -> Charge"
         insert(c);
 end
 
-rule "R38: Not R>0 and Sufficiently Charged Battery"
+rule "R236: Not R>0 and Sufficiently Charged Battery"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "false")
+        Hypothesis(description == "Has EV", value == "true")
         $p : Participant(id == participantId, isEvSufficientlyCharged())
     then
         System.out.println("R38: Not R>0 and Sufficiently Charged Battery");
@@ -742,7 +745,7 @@ rule "R38: Not R>0 and Sufficiently Charged Battery"
         insert(h);
 end
 
-rule "R39: Not R>0 and Sufficiently Charged Battery and Predicted Energy Scarcity"
+rule "R237: Not R>0 and Sufficiently Charged Battery and Predicted Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "false")
@@ -757,7 +760,7 @@ rule "R39: Not R>0 and Sufficiently Charged Battery and Predicted Energy Scarcit
         insert(h);
 end
 
-rule "R40: Not R>0 and Sufficiently Charged Battery and Not Predicted Energy Scarcity -> Use Battery"
+rule "R238: Not R>0 and Sufficiently Charged Battery and Not Predicted Energy Scarcity -> Use Battery"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "false")
@@ -772,7 +775,7 @@ rule "R40: Not R>0 and Sufficiently Charged Battery and Not Predicted Energy Sca
         insert(c);
 end
 
-rule "R41: Not R>0 and Not Predicted Energy Scarcity and Expensive Hour -> Shift load to essential consumption"
+rule "R239: Not R>0 and Not Predicted Energy Scarcity and Expensive Hour -> Shift load to essential consumption"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "false")
@@ -783,7 +786,7 @@ rule "R41: Not R>0 and Not Predicted Energy Scarcity and Expensive Hour -> Shift
         insert(c);
 end
 
-rule "R42: Not R>0 and Not Predicted Energy Scarcity and Not Expensive Hour -> Keep Buying"
+rule "R240: Not R>0 and Not Predicted Energy Scarcity and Not Expensive Hour -> Keep Buying"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "false")
@@ -795,18 +798,26 @@ rule "R42: Not R>0 and Not Predicted Energy Scarcity and Not Expensive Hour -> K
         insert(c);
 end
 
-rule "R43: Not R>0 and Not Has EV and Expensive Hour -> Shift load to essential consumption"
+rule "R241: Not R>0 and Not Has EV and Expensive Hour -> Shift load to essential consumption"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "false")
         Hypothesis(description == "Has EV", value == "false")
+        $p : Participant(id == participantId)
         eval(answer("Expensive Hour", "yes"))
     then
-        Conclusion c = new Conclusion(Conclusion.SHIFT_LOAD_ESSENTIAL);
-        insert(c);
+        boolean hasDevice = chooseDevicesNonEssential($p);
+                if(hasDevice){
+                    System.out.println("R43: Not R>0 and Not Has EV and Expensive Hour -> Shift load to essential consumption");
+                    Conclusion c = new Conclusion(Conclusion.SHIFT_LOAD_ESSENTIAL);
+                    insert(c);
+                }else{
+                    Conclusion c = new Conclusion(Conclusion.KEEP_BUYING);
+                    insert(c);
+                }
 end
 
-rule "R44: Not R>0 and Not Has EV and Not Expensive Hour -> Keep Buying"
+rule "R242: Not R>0 and Not Has EV and Not Expensive Hour -> Keep Buying"
     when
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "false")
