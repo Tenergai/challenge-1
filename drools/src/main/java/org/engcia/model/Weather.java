@@ -88,8 +88,8 @@ public class Weather {
             case "extreme":
             case "extreme-high":
             case "high-medium":
-            case "medium-low":
                 return true;
+            case "medium-low":
             case "low-none":
             case "none":
                 return false;
