@@ -33,8 +33,9 @@ end
 rule "R101: Ratio greater than 1"
     when
         Hypothesis(description == "manager", value == "true")
-        eval(answer("Ratio greater than 1", "yes"))
+        Period(id == id, getRatio() > 1)
     then
+        System.out.println("R101: Ratio greater than 1");
         Hypothesis h = new Hypothesis("R", "greater");
         insert(h);
 end
@@ -42,9 +43,9 @@ end
 rule "R102: Ratio equal or less than 1"
     when
         Hypothesis(description == "manager", value == "true")
-        eval(answer("Ratio greater than 1", "no"))
+        Period(id == id, getRatio() <= 1)
     then
-
+        System.out.println("R102: Ratio equal or less than 1");
         Hypothesis h = new Hypothesis("R", "equal or less");
         insert(h);
 end
@@ -53,8 +54,9 @@ rule "R103: Ratio greater than 1 and Predicted Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
-        eval(answer("predicted energy scarcity", "yes"))
+        $w : Weather(evaluatePredictedEnergyScarcity())
     then
+        System.out.println("R103: Ratio greater than 1 and Predicted Energy Scarcity");
         Hypothesis h = new Hypothesis("predicted energy scarcity", "true");
         insert(h);
 end
@@ -63,8 +65,9 @@ rule "R104: Ratio greater than 1 and Not Predicted Energy Scarcity"
     when
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
-        eval(answer("predicted energy scarcity", "no"))
+        $w : Weather(!evaluatePredictedEnergyScarcity())
     then
+        System.out.println("R104: Ratio greater than 1 and Not Predicted Energy Scarcity");
         Hypothesis h = new Hypothesis("predicted energy scarcity", "false");
         insert(h);
 end
@@ -74,7 +77,7 @@ rule "R105: Ratio greater than 1 and PES and Battery Sufficiently Charged"
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
         Hypothesis(description == "predicted energy scarcity", value == "true")
-        eval(answer("battery sufficiently charged", "no"))
+        $p : Period(id == id, areBatteriesSufficientlyCharged())
     then
         Conclusion c = new Conclusion(Conclusion.CHARGE_BATTERY);
         insert(c);
@@ -85,7 +88,7 @@ rule "R106: Ratio greater than 1 and PES and Not Battery Sufficiently Charged"
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
         Hypothesis(description == "predicted energy scarcity", value == "true")
-        eval(answer("battery sufficiently charged", "yes"))
+        $p : Period(id == id, areBatteriesSufficientlyCharged() == false)
     then
         Hypothesis h = new Hypothesis("battery sufficiently charged", "true");
         insert(h);
@@ -96,7 +99,7 @@ rule "R107.1: Ratio greater than 1 and Battery Sufficiently Charged and Communit
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
         Hypothesis(description == "battery sufficiently charged", value == "true")
-        eval(answer("community demand", "yes"))
+        Period(id == id, communityDemand())
     then
         Conclusion c = new Conclusion(Conclusion.SELL_COMMUNITY_MARKET);
         insert(c);
@@ -107,7 +110,7 @@ rule "R107.2: Ratio greater than 1 and Battery Sufficiently Charged and not Comm
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
         Hypothesis(description == "battery sufficiently charged", value == "true")
-        eval(answer("community demand", "no"))
+        Period(id == id, communityDemand() == false)
     then
         Hypothesis h = new Hypothesis("community demand", "false");
         insert(h);
@@ -118,7 +121,7 @@ rule "R108.1: Ratio greater than 1 and not PES and Community Demand"
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
         Hypothesis(description == "predicted energy scarcity", value == "false")
-        eval(answer("community demand", "yes"))
+        Period(id == id, communityDemand())
     then
         Conclusion c = new Conclusion(Conclusion.SELL_COMMUNITY_MARKET);
         insert(c);
@@ -129,7 +132,7 @@ rule "R108.2: Ratio greater than 1 and not PES and not Community Demand"
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
         Hypothesis(description == "predicted energy scarcity", value == "false")
-        eval(answer("community demand", "no"))
+        Period(id == id, communityDemand() == false)
     then
         Hypothesis h = new Hypothesis("community demand", "false");
         insert(h);
@@ -335,10 +338,10 @@ rule "R203: R>1 and Not Predicted Energy Scarcity"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
         $w : Weather(!evaluatePredictedEnergyScarcity())
-        $p : Participant(id == id)
     then
         System.out.println("R3 - R>1 and Not Predicted Energy Scarcity");
         $p.setEvThreshold($w.getThreshold());
+        update($p);
         Hypothesis h = new Hypothesis("Predicted Energy Scarcity", "false");
         insert(h);
 end
@@ -390,7 +393,6 @@ rule "R207: R>1 and Has EV and Not Sufficiently Charged Battery"
         Hypothesis(description == "Predicted Energy Scarcity", value == "true")
 
     then
-
         System.out.println("R7 - R>1 and Has EV and Not Sufficiently Charged Battery");
         Conclusion c = new Conclusion(Conclusion.CHARGE_BATTERY);
         insert(c);
@@ -592,7 +594,7 @@ rule "R224: R>0 and Not Predicted Energy Scarcity and Can Improve R -> Improve R
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "true")
         Hypothesis(description == "Predicted Energy Scarcity", value == "false")
-        $p : Participant(id == participantId)
+        $p : Participant(id == id)
         eval(answer("Do you wish to lower your consumption", "yes"))
     then
         boolean hasDevice = chooseDevicesNonEssential($p);
@@ -804,7 +806,7 @@ rule "R241: Not R>0 and Not Has EV and Expensive Hour -> Shift load to essential
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>0", value == "false")
         Hypothesis(description == "Has EV", value == "false")
-        $p : Participant(id == participantId)
+        $p : Participant(id == id)
         eval(answer("Expensive Hour", "yes"))
     then
         boolean hasDevice = chooseDevicesNonEssential($p);
