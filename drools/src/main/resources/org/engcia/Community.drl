@@ -79,6 +79,7 @@ rule "R105: Ratio greater than 1 and PES and Battery Sufficiently Charged"
         Hypothesis(description == "predicted energy scarcity", value == "true")
         $p : Period(id == id, areBatteriesSufficientlyCharged())
     then
+        System.out.println("R105: Ratio greater than 1 and PES and Battery Sufficiently Charged");
         Conclusion c = new Conclusion(Conclusion.CHARGE_BATTERY);
         insert(c);
 end
@@ -90,6 +91,7 @@ rule "R106: Ratio greater than 1 and PES and Not Battery Sufficiently Charged"
         Hypothesis(description == "predicted energy scarcity", value == "true")
         $p : Period(id == id, areBatteriesSufficientlyCharged() == false)
     then
+        System.out.println("R106: Ratio greater than 1 and PES and Not Battery Sufficiently Charged");
         Hypothesis h = new Hypothesis("battery sufficiently charged", "true");
         insert(h);
 end
@@ -101,6 +103,7 @@ rule "R107.1: Ratio greater than 1 and Battery Sufficiently Charged and Communit
         Hypothesis(description == "battery sufficiently charged", value == "true")
         Period(id == id, communityDemand())
     then
+        System.out.println("R107.1: Ratio greater than 1 and Battery Sufficiently Charged and Community Demand");
         Conclusion c = new Conclusion(Conclusion.SELL_COMMUNITY_MARKET);
         insert(c);
 end
@@ -112,6 +115,7 @@ rule "R107.2: Ratio greater than 1 and Battery Sufficiently Charged and not Comm
         Hypothesis(description == "battery sufficiently charged", value == "true")
         Period(id == id, communityDemand() == false)
     then
+        System.out.println("R107.2: Ratio greater than 1 and Battery Sufficiently Charged and not Community Demand");
         Hypothesis h = new Hypothesis("community demand", "false");
         insert(h);
 end
@@ -123,6 +127,7 @@ rule "R108.1: Ratio greater than 1 and not PES and Community Demand"
         Hypothesis(description == "predicted energy scarcity", value == "false")
         Period(id == id, communityDemand())
     then
+        System.out.println("R108.1: Ratio greater than 1 and not PES and Community Demand");
         Conclusion c = new Conclusion(Conclusion.SELL_COMMUNITY_MARKET);
         insert(c);
 end
@@ -134,6 +139,7 @@ rule "R108.2: Ratio greater than 1 and not PES and not Community Demand"
         Hypothesis(description == "predicted energy scarcity", value == "false")
         Period(id == id, communityDemand() == false)
     then
+        System.out.println("R108.2: Ratio greater than 1 and not PES and not Community Demand");
         Hypothesis h = new Hypothesis("community demand", "false");
         insert(h);
 end
@@ -145,6 +151,7 @@ rule "R109: Ratio greater than 1 and Not Community Demand and External Market De
         Hypothesis(description == "community demand", value == "false")
         eval(answer("external market demand", "yes"))
     then
+        System.out.println("R109: Ratio greater than 1 and Not Community Demand and External Market Demand");
         Conclusion c = new Conclusion(Conclusion.SELL_EXTERNAL_MARKET);
         insert(c);
 end
@@ -156,6 +163,7 @@ rule "R110: Ratio greater than 1 and Not Community Demand and External Market De
         Hypothesis(description == "community demand", value == "false")
         eval(answer("external market demand", "no"))
     then
+        System.out.println("R110: Ratio greater than 1 and Not Community Demand and External Market Demand");
         Conclusion c = new Conclusion(Conclusion.SEND_GRID);
         insert(c);
 end
@@ -167,6 +175,7 @@ rule "R111: R equal or less than 1 and Currently in Energy Scarcity"
         Hypothesis(description == "R", value == "equal or less")
         eval(answer("currently in energy scarcity", "yes"))
     then
+        System.out.println("R111: R equal or less than 1 and Currently in Energy Scarcity");
         Hypothesis h = new Hypothesis("currently in energy scarcity", "true");
         insert(h);
 end
@@ -177,6 +186,7 @@ rule "R112: R equal or less than 1 and Not Currently in Energy Scarcity"
         Hypothesis(description == "R", value == "equal or less")
         eval(answer("currently in energy scarcity", "no"))
     then
+        System.out.println("R112: R equal or less than 1 and Not Currently in Energy Scarcity");
         Hypothesis h = new Hypothesis("currently in energy scarcity", "false");
         insert(h);
 end
@@ -187,6 +197,7 @@ rule "R113: Currently in Energy Scarcity and Batteries are charged"
         Hypothesis(description == "currently in energy scarcity", value == "true")
         $p : Period(id == id, areBatteriesSufficientlyCharged())
     then
+        System.out.println("R113: Currently in Energy Scarcity and Batteries are charged");
         Conclusion c = new Conclusion(Conclusion.USE_BATTERY);
         insert(c);
 end
@@ -197,6 +208,7 @@ rule "R114: Currently in Energy Scarcity and Batteries are not charged"
         Hypothesis(description == "currently in energy scarcity", value == "true")
         $p : Period(id == id, areBatteriesSufficientlyCharged() == false)
     then
+        System.out.println("R114: Currently in Energy Scarcity and Batteries are not charged");
         Hypothesis h = new Hypothesis("batteries are charged", "false");
         insert(h);
 end
@@ -207,7 +219,7 @@ rule "R115.1: Not Currently in Energy Scarcity and no Participant with surplus"
         Hypothesis(description == "currently in energy scarcity", value == "false")
         $p : Period(id == id, participantsWithSurplus() == false)
     then
-        //participants with surplus?
+        System.out.println("R115.1: Not Currently in Energy Scarcity and no Participant with surplus");
         Hypothesis h = new Hypothesis("participants with surplus", "false");
         insert(h);
 end
@@ -218,6 +230,7 @@ rule "R115.2: Not Currently in Energy Scarcity and Participant with surplus"
         Hypothesis(description == "currently in energy scarcity", value == "false")
         $p : Period(id == id, participantsWithSurplus())
     then
+        System.out.println("R115.2: Not Currently in Energy Scarcity and Participant with surplus");
         Conclusion c = new Conclusion(Conclusion.BALANCE_R);
         insert(c);
 end
@@ -229,6 +242,7 @@ rule "R116.1: Batteries are not charged and no Participant with surplus"
         Hypothesis(description == "batteries are charged", value == "false")
         $p : Period(id == id, participantsWithSurplus() == false)
     then
+        System.out.println("R116.1: Batteries are not charged and no Participant with surplus");
         Hypothesis h = new Hypothesis("participants with surplus", "false");
         insert(h);
 end
@@ -239,6 +253,7 @@ rule "R116.2: Batteries are not charged and Participant with surplus"
         Hypothesis(description == "batteries are charged", value == "false")
         $p : Period(id == id, participantsWithSurplus())
     then
+        System.out.println("R116.2: Batteries are not charged and Participant with surplus");
         Conclusion c = new Conclusion(Conclusion.BALANCE_R);
         insert(c);
 end
@@ -249,6 +264,7 @@ rule "R116: Not Participant with surplus and Predicted Energy Scarcity"
         Hypothesis(description == "participants with surplus", value == "false")
         $w : Weather(evaluatePredictedEnergyScarcity())
     then
+        System.out.println("R116: Not Participant with surplus and Predicted Energy Scarcity");
         Conclusion c = new Conclusion(Conclusion.ADJUST_THRESHOLD);
         insert(c);
 end
@@ -259,6 +275,7 @@ rule "R117: Not Participant with surplus and Not Predicted Energy Scarcity"
         Hypothesis(description == "participants with surplus", value == "false")
         $w : Weather(!evaluatePredictedEnergyScarcity())
     then
+        System.out.println("R117: Not Participant with surplus and Not Predicted Energy Scarcity");
         Hypothesis h = new Hypothesis("predicted energy scarcity", "false");
         insert(h);
 end
@@ -269,6 +286,7 @@ rule "R118: Not Predicted Energy Scarcity and Expensive Hour"
         Hypothesis(description == "predicted energy scarcity", value == "false")
         eval(answer("expensive hour", "yes"))
     then
+        System.out.println("R118: Not Predicted Energy Scarcity and Expensive Hour");
         Hypothesis h = new Hypothesis("expensive hour", "true");
         insert(h);
 end
@@ -279,6 +297,7 @@ rule "R119: Not Predicted Energy Scarcity and Not Expensive Hour"
         Hypothesis(description == "predicted energy scarcity", value == "false")
         eval(answer("expensive hour", "no"))
     then
+        System.out.println("R119: Not Predicted Energy Scarcity and Not Expensive Hour");
         Conclusion c = new Conclusion(Conclusion.BUY_EXTERNAL_MARKET);
         insert(c);
 end
@@ -289,6 +308,7 @@ rule "R120: Expensive Hour and Sufficiently Charged Battery"
         Hypothesis(description == "expensive hour", value == "true")
         $p : Period(id == id, areBatteriesSufficientlyCharged())
     then
+        System.out.println("R120: Expensive Hour and Sufficiently Charged Battery");
         Conclusion c = new Conclusion(Conclusion.USE_BATTERY);
         insert(c);
 end
@@ -299,6 +319,7 @@ rule "R120.1: Expensive Hour and Not Sufficiently Charged Battery"
         Hypothesis(description == "expensive hour", value == "true")
         $p : Period(id == id, areBatteriesSufficientlyCharged() == false)
     then
+        System.out.println("R120.1: Expensive Hour and Not Sufficiently Charged Battery");
         Conclusion c = new Conclusion(Conclusion.BUY_EXTERNAL_MARKET);
         insert(c);
 end
@@ -338,6 +359,7 @@ rule "R203: R>1 and Not Predicted Energy Scarcity"
         Hypothesis(description == "manager", value == "false")
         Hypothesis(description == "R>1", value == "true")
         $w : Weather(!evaluatePredictedEnergyScarcity())
+        $p : Participant(id == id)
     then
         System.out.println("R3 - R>1 and Not Predicted Energy Scarcity");
         $p.setEvThreshold($w.getThreshold());
