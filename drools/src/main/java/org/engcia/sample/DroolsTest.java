@@ -69,46 +69,53 @@ public class DroolsTest {
     }
 
     private static void bootstrapCommunity(KieSession kieSession) {
-        ArrayList<Device> devices = new ArrayList<>();
 
-        Device kettle = new Device("kettle", 1, false, true);
-        devices.add(kettle);
-        Device washingMachine = new Device("washing machine", 1, false, true);
-        devices.add(washingMachine);
-        Device fridge = new Device("fridge", 3, true, true);
-        devices.add(fridge);
-        Device ac = new Device("ac", 40, true, true);
-        devices.add(ac);
-        Device aird = new Device("aird", 15, false, true);
-        devices.add(aird);
 
-        Participant participant = new Participant("1",100,devices);
-
-        Weather weather = new Weather(30.0, 700.0, 20.0);
+        //gets bat threshold from weather info
+        Weather weather = new Weather(30.0, 0.0, 0.0);
         int threshold = FuzzyLogic.fuzzify(weather.getWindSpeedKMH().intValue(),weather.getSolarRadiationWattsM2().intValue());
         weather.setPredictedEnergyScarcity(threshold);
 
-        Battery ev = new Battery(90,10);
-        participant.setEv(ev);
-        ev.setThreshold(threshold);
+        //creates bootstrap devices
+        Device kettle = new Device("kettle", 1, false, true);
+        Device washingMachine = new Device("washing machine", 25, false, true);
+        Device fridge = new Device("fridge", 30, true, true);
+        Device ac = new Device("ac", 40, true, true);
+        Device aird = new Device("aird", 15, false, true);
+        Device furnace = new Device("furnace",70, true, true);
 
-        Device furnace = new Device("furnace",70, true, false);
-        devices = new ArrayList<>();
+        //participant 1
+        ArrayList<Device> devices = new ArrayList<>();
+        devices.add(kettle);
+        devices.add(washingMachine);
+        devices.add(fridge);
+        devices.add(ac);
+        devices.add(aird);
+        Participant participant1 = new Participant("1",1000,devices);
+
+        //participant 2
+        ArrayList<Device> devices2 = new ArrayList<>();
         devices.add(furnace);
+        Participant participant2 = new Participant("2",1000, devices2);
 
-        Participant participant1 = new Participant("2",100, devices);
+        //participant 3
+        ArrayList<Device> devices3 = new ArrayList<>();
+        Participant participant3 = new Participant("3",1000, devices3);
+
+        //list of participants
         ArrayList<Participant> participants = new ArrayList<>();
-        participants.add(participant);
         participants.add(participant1);
+        participants.add(participant2);
+        participants.add(participant3);
 
+        //creates battery
         Battery bat = new Battery(90,10);
-        bat.setThreshold(threshold);
+        //bat.setThreshold(threshold);
         ArrayList<Battery> batteries = new ArrayList<>();
         batteries.add(bat);
 
-        Period period = new Period("1",participants,batteries);
-
-        Pricing p = new Pricing(1000.0);
+        Pricing p = new Pricing(50.0);
+        Period period = new Period("1",participants,batteries,p);
 
         kieSession.setGlobal("id", period.getId());
         kieSession.insert(weather);

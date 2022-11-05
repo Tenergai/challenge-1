@@ -79,9 +79,9 @@ rule "R105: Ratio greater than 1 and PES and Battery Sufficiently Charged"
         Hypothesis(description == "predicted energy scarcity", value == "true")
         $p : Period(id == id, areBatteriesSufficientlyCharged())
     then
+        Hypothesis h = new Hypothesis("battery sufficiently charged", "true");
+        insert(h);
         System.out.println("R105: Ratio greater than 1 and PES and Battery Sufficiently Charged");
-        Conclusion c = new Conclusion(Conclusion.CHARGE_BATTERY);
-        insert(c);
 end
 
 rule "R106: Ratio greater than 1 and PES and Not Battery Sufficiently Charged"
@@ -92,8 +92,8 @@ rule "R106: Ratio greater than 1 and PES and Not Battery Sufficiently Charged"
         $p : Period(id == id, areBatteriesSufficientlyCharged() == false)
     then
         System.out.println("R106: Ratio greater than 1 and PES and Not Battery Sufficiently Charged");
-        Hypothesis h = new Hypothesis("battery sufficiently charged", "true");
-        insert(h);
+        Conclusion c = new Conclusion(Conclusion.CHARGE_BATTERY);
+        insert(c);
 end
 
 rule "R107.1: Ratio greater than 1 and Battery Sufficiently Charged and Community Demand"
@@ -149,7 +149,7 @@ rule "R109: Ratio greater than 1 and Not Community Demand and External Market De
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
         Hypothesis(description == "community demand", value == "false")
-        eval(answer("external market demand", "yes"))
+        Period(id == id, externalDemand() == true)
     then
         System.out.println("R109: Ratio greater than 1 and Not Community Demand and External Market Demand");
         Conclusion c = new Conclusion(Conclusion.SELL_EXTERNAL_MARKET);
@@ -161,9 +161,9 @@ rule "R110: Ratio greater than 1 and Not Community Demand and External Market De
         Hypothesis(description == "manager", value == "true")
         Hypothesis(description == "R", value == "greater")
         Hypothesis(description == "community demand", value == "false")
-        eval(answer("external market demand", "no"))
+        Period(id == id, externalDemand() == false)
     then
-        System.out.println("R110: Ratio greater than 1 and Not Community Demand and External Market Demand");
+        System.out.println("R110: Ratio greater than 1 and Not Community Demand and Not External Market Demand");
         Conclusion c = new Conclusion(Conclusion.SEND_GRID);
         insert(c);
 end
