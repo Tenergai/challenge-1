@@ -166,7 +166,7 @@ calcular_ratio:-
 	asserta(ultimo_facto(X)),
 	assertz(facto(X,(ratio(this_period,Ratio)))))).
 
-%%%%%%%%%%%%%%%%[INDIVIDUAL - Disconnect Devices using all production]%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%[INDIVIDUAL - Turn on Disconnected Devices using all production]%%%%%%%%%%%%%%%%%%%%
 combine(E, LR1):-findall(device(N,C),(facto(_,device(N,C)), facto(_,connected(N,0))),D),makecombinations(D,E,LR),devices(E,D1),checkOneOne(LR,D1,LR1),!.
 
 makecombinations([], _,[]).
@@ -306,11 +306,11 @@ calculate_current_energy_scarcity:-
 	assertz(facto(X,current_energy_scarcity(this_period,R))))).
 
 checkCurrentScarcity(SR,W,T,R):-
-	SR>=100, SR<200, W>=12, T>=15, R is 1.
+	SR>=150,W<25,W>=3, T>=15, R is 0.
 checkCurrentScarcity(SR,W,T,R):-
-	((SR>=100, SR<200);W>=12), T>=15, R is 1.
+	(SR>=150;(W<25,W>=3)), T>=15, R is 0.
 checkCurrentScarcity(SR,W,T,R):-
-	R is 0.
+	R is 1.
 
 ask_community_demand:-
 	write('ANY COMMUNITY DEMAND? 1-YES/ 0-NO (end with .)-> '),

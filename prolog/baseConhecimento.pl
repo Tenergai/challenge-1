@@ -36,7 +36,7 @@ facto_dispara_regras(check_community_participants_with_surplus(this_period,_),[4
 facto_dispara_regras(participant_with_surplus(this_period,_),[42,43,44,45]).
 facto_dispara_regras(community_expensive_hour(this_period,_),[44,45]).
 facto_dispara_regras(check_community_battery_suff_charged(this_period,_),[46,47]).
-facto_dispara_regras(usertype(community), [30,33,38,40]).
+facto_dispara_regras(usertype(this_period,community), [30,33,38,40]).
 
 
 
@@ -263,7 +263,7 @@ facto(10,essential(washing_machine,0)).
 
 facto(11,device(dryer,100)).
 facto(12,connected(dryer,0)).
-facto(13,essential(washing_machine,0)).
+facto(13,essential(dryer,0)).
 
 facto(14,device(roomba,500)).
 facto(15,connected(roomba,0)).
@@ -274,12 +274,12 @@ facto(18,connected(microwave,1)).
 facto(19,essential(microwave,1)).
 
 facto(20,energy_price(this_period,0.005)).
-facto(21, usertype(this_period,individual)).
+facto(21,usertype(this_period,individual)).
 facto(22,device(ev,150)).
 facto(23,has_EV(this_period,1)).
 facto(24,predicted_scarcity(this_period,0)).
 facto(25,want_shift_load(this_period,0)).
-facto(26, battery_ev(this_period,30)).
+facto(26,battery_ev(this_period,30)).
 facto(27,preco_medio(this_period,0.12)).
 facto(28,production_community(this_period,6000)).
 facto(29,total_consumo_community(this_period,4000)).
