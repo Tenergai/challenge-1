@@ -12,8 +12,8 @@ import org.engcia.model.Period;
 
 import function org.engcia.view.UI.answer;
 
-import function org.engcia.sample.DroolsTest.chooseDevicesTurnOn;
-import function org.engcia.sample.DroolsTest.chooseDevicesNonEssential;
+import function org.engcia.sample.ExpertSytemMain.chooseDevicesTurnOn;
+import function org.engcia.sample.ExpertSytemMain.chooseDevicesNonEssential;
 import function org.engcia.fuzzy.FuzzyLogic.fuzzify;
 
 query "Conclusions"

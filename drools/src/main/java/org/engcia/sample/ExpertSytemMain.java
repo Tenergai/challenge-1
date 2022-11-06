@@ -22,7 +22,7 @@ import java.util.TreeMap;
 /**
  * This is a sample class to launch a rule.
  */
-public class DroolsTest {
+public class ExpertSytemMain {
     public static KieSession KS;
     public static BufferedReader BR;
     public static TrackingAgendaEventListener agendaEventListener;
@@ -130,14 +130,14 @@ public class DroolsTest {
     private static void runEngine() {
         try {
 
-            DroolsTest.justifications = new TreeMap<Integer, Justification>();
+            ExpertSytemMain.justifications = new TreeMap<Integer, Justification>();
 
             // load up the knowledge base
             KieServices ks = KieServices.Factory.get();
             KieContainer kContainer = ks.getKieClasspathContainer();
             final KieSession kSession = kContainer.newKieSession("community-rules");
-            DroolsTest.KS = kSession;
-            DroolsTest.agendaEventListener = new TrackingAgendaEventListener();
+            ExpertSytemMain.KS = kSession;
+            ExpertSytemMain.agendaEventListener = new TrackingAgendaEventListener();
             kSession.addEventListener(agendaEventListener);
 
             // Query listener
@@ -152,7 +152,7 @@ public class DroolsTest {
                     System.out.println(">>>" + conclusion.toString());
 
                     //System.out.println(DroolsTest.justifications);
-                    How how = new How(DroolsTest.justifications);
+                    How how = new How(ExpertSytemMain.justifications);
                     System.out.println(how.getHowExplanation(conclusion.getId()));
 
                     // stop inference engine after as soon as got a conclusion

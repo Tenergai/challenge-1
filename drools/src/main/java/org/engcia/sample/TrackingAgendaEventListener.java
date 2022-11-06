@@ -71,7 +71,7 @@ public class TrackingAgendaEventListener extends DefaultAgendaEventListener{
         for (Fact f: rhs) {
             //System.out.println(f.getId() + ":" + f);
             Justification j = new Justification(ruleName, lhs, f);
-            DroolsTest.justifications.put(f.getId(), j);
+            ExpertSytemMain.justifications.put(f.getId(), j);
         }
 
         resetLhs();
