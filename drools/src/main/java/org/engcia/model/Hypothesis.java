@@ -1,6 +1,6 @@
 package org.engcia.model;
 
-import org.engcia.sample.DroolsTest;
+import org.engcia.sample.ExpertSytemMain;
 
 public class Hypothesis extends Fact{
 
@@ -10,7 +10,7 @@ public class Hypothesis extends Fact{
 	public Hypothesis(String description, String value) {
 		this.description = description;
 		this.value = value;
-		DroolsTest.agendaEventListener.addRhs(this);
+		ExpertSytemMain.agendaEventListener.addRhs(this);
 	}
 
 	public String getDescription() {

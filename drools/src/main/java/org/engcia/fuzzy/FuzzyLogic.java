@@ -24,7 +24,7 @@ public class FuzzyLogic {
         }
 
         // Show
-        //JFuzzyChart.get().chart(fis);
+        JFuzzyChart.get().chart(fis);
 
         // Set inputs////########################################
         fis.setVariable("wind_power", windPower);//wind power

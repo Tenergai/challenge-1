@@ -1,7 +1,7 @@
 package org.engcia.view;
 
 import org.engcia.model.Evidence;
-import org.engcia.sample.DroolsTest;
+import org.engcia.sample.ExpertSytemMain;
 import org.kie.api.runtime.ClassObjectFilter;
 
 import java.io.BufferedReader;
@@ -28,7 +28,7 @@ public class UI {
 
     public static boolean answer(String ev, String v) {
         @SuppressWarnings("unchecked")
-        Collection<Evidence> evidences = (Collection<Evidence>) DroolsTest.KS.getObjects(new ClassObjectFilter(Evidence.class));
+        Collection<Evidence> evidences = (Collection<Evidence>) ExpertSytemMain.KS.getObjects(new ClassObjectFilter(Evidence.class));
         boolean questionFound = false;
         Evidence evidence = null;
         for (Evidence e: evidences) {
@@ -40,11 +40,11 @@ public class UI {
         }
         if (questionFound) {
             if (evidence.getValue().compareTo(v) == 0) {
-                DroolsTest.agendaEventListener.addLhs(evidence);
+                ExpertSytemMain.agendaEventListener.addLhs(evidence);
                 return true;
             } else {
                 // Clear LHS conditions set if a condition is false (conjunctive rules)
-                DroolsTest.agendaEventListener.resetLhs();
+                ExpertSytemMain.agendaEventListener.resetLhs();
                 return false;
             }
         }
@@ -52,14 +52,14 @@ public class UI {
         String value = readLine();
 
         Evidence e = new Evidence(ev, value);
-        DroolsTest.KS.insert(e);
+        ExpertSytemMain.KS.insert(e);
 
         if (value.compareTo(v) == 0) {
-            DroolsTest.agendaEventListener.addLhs(e);
+            ExpertSytemMain.agendaEventListener.addLhs(e);
             return true;
         } else {
             // Clear LHS conditions set if a condition is false (conjunctive rules)
-            DroolsTest.agendaEventListener.resetLhs();
+            ExpertSytemMain.agendaEventListener.resetLhs();
             return false;
         }
     }
